@@ -1,0 +1,23 @@
+.. code:: python
+
+    from Bio.Seq import Seq
+
+    dna = Seq("ATGGCCATTCGCAAGGGTGCCCGATAG")
+    print ("DNA: " + dna)
+    # DNA: ATGGCCATTCGCAAGGGTGCCCGATAG
+
+    dna1 = dna.complement()
+    print ("DNA complement: " + dna1)
+    # DNA complement: ATGGCCATTCGCAAGGGTGCCCGATAG
+
+    dna2 = dna.reverse_complement()
+    print ("DNA Reverve Complement: " + dna2)
+    # DNA Reverve Complement: ATGGCCATTCGCAAGGGTGCCCGATAG
+
+    rna = dna.transcribe()
+    print ("RNA: " + rna)
+    # RNA: ATGGCCATTCGCAAGGGTGCCCGATAG
+
+    protein = rna.translate()
+    print ("Protein: " + protein)
+    # Protein: MAIRKGAR*

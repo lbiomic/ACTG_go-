@@ -1,0 +1,1397 @@
+#:import c kivy.utils.get_color_from_hex
+#:set color_background_screen c('#f1f3f4')
+#:set color_background_screen_1 c('#7a297a')
+#:set color_background_menu c('#a03a68')
+#:set color_background_menu_2 c('#fffafa')
+#:set color_background_actionbar c('#6f2e61')
+#:set color_background .57, .57, .57, 1
+#:set color_button c('#2ad3ff')
+#:set color_button_2 c('#00ff00')
+#:set color_text c('#000000')
+#:set color_textInput c('#ffff80')
+#:set color_result c('#ff7b5a')
+
+# Estrutura Padrão de Herança
+
+<GridMenu@GridLayout>:
+	spacing: 10 
+	padding: [10,10,10,10] 
+    canvas.before:
+    	Color:
+    		rgba: color_background_menu
+        Rectangle:
+            pos: self.x, self.y + 1
+            size: self.size
+        Color:
+            rgb: 1,1,1,1
+        Rectangle:
+			pos: self.x, self.y - 2
+			size: self.width, 1
+
+<GridScreen@GridLayout>
+	spacing: 10 
+	padding: [10,10,10,10] 
+	canvas.before:
+		Color:
+		    rgba: color_background_menu_2
+		Rectangle:
+		    pos: self.x, self.y + 1
+		    size: self.size
+		Color:
+		    rgb: 1,1,1,1
+		Rectangle:
+			pos: self.x, self.y - 2
+			size: self.width, 1
+
+<Box@BoxLayout>
+	orientation: "vertical"
+    spacing: 10
+    padding: [10,10,10,10]
+
+<Box_Screen@BoxLayout>
+	orientation: 'vertical'
+    spacing: 10
+    padding: [10,10,10,10]
+    canvas.before:
+    	Color:
+    		rgba: color_background_screen
+        Rectangle:
+            pos: self.x, self.y + 1
+            size: self.size
+
+<BoxCols@BoxLayout>
+	spacing: 10
+	size_hint_y: .1 # Altura dos Botões
+
+<BtMenu@Button>
+    background_color: 0,0,0,0
+    background_normal: ''
+    background_down: ''
+    name_image: ''
+	Image:
+		source: 'data/icons/' + self.parent.name_image
+		x: self.parent.center_x - 71
+		y: self.parent.center_y - 71 
+		size_hint: None, None
+		width: 142
+		height: 142
+
+<Bt@Button>
+	size_hint_y: None
+    height: '48dp'
+    background_normal: ''
+    background_down: ''
+    background_color: color_button
+
+<Lb@Label>
+	markup: True
+	color: color_text
+	halign: 'left' 
+	size_hint: (1, None)
+	text_size: (self.width - sp(10), None)
+	size: self.texture_size
+
+<Sp@Spinner>
+	background_normal: ''
+	background_down: ''
+	background_color: color_button
+
+
+##############################################################################################
+# Tela Screen Splash
+##############################################################################################
+
+<Screen_Splash>:
+
+	Box:
+		id: background_color_id
+		canvas.before:
+	    	Color:
+	    		rgba: color_background_screen_1
+	        Rectangle:
+	            pos: self.x, self.y + 1
+	            size: self.size
+
+	    Lb:
+			text: root.text_programaTitle_screen
+			id: label_id
+			size_hint_y: 1.
+
+
+##############################################################################################
+# Telas do Menu
+##############################################################################################
+
+<Screen_Menu>: 
+
+    BoxLayout:
+    	orientation: 'vertical'
+
+    	ActionBar:
+    		pos_hint: {'top':1}
+
+		    ActionView:
+		        use_separator: True
+		        canvas:
+				    Color:
+				    	rgba: color_background_actionbar
+				    Rectangle:
+				        pos: self.x, self.y + 1
+				        size: self.size
+
+		        ActionPrevious:
+		            title: root.text_actionbar
+		            app_icon: ''
+		            with_previous: False
+
+		        ActionGroup:
+                	text: root.text_config
+
+	                ActionButton:
+	                    text: 'Pt-Br'
+
+	                ActionButton:
+	                    text: 'En'
+
+		# Tela do Menu
+    	Box:
+
+	        Lb:
+	        	text: root.text_programaTitle
+
+	        # Botões do Menu
+	        GridMenu:
+	            cols: 3 if root.width > root.height else 2
+
+	            BtMenu:
+		            name_image: root.title_image_1
+		            on_press: 
+	                    root.manager.transition.direction = 'left' 
+	                    root.manager.transition.duration = 1 
+	                    root.manager.current = 'screen_1'
+
+	            BtMenu:
+		            name_image: root.title_image_2
+		            on_press: 
+	                    root.manager.transition.direction = 'left' 
+	                    root.manager.transition.duration = 1 
+	                    root.manager.current = 'screen_2'
+
+	            BtMenu:
+		            name_image: root.title_image_3
+		            on_press: 
+	                    root.manager.transition.direction = 'left' 
+	                    root.manager.transition.duration = 1 
+	                    root.manager.current = 'screen_3'
+
+	            BtMenu:
+		            name_image: root.title_image_4
+			    	on_press: root.about()
+
+			    BtMenu:
+		            name_image: root.title_image_5
+			    	on_press: root.confirm_exit()
+
+	        Lb:
+	        	text: root.text_version
+	        	halign: 'right' if root.width > root.height else 'center'
+
+
+##############################################################################################
+# DNA Editor
+##############################################################################################
+
+<screen_1>:
+
+	Box_Screen:
+
+		GridScreen:
+	        cols: 2 if root.width > root.height else 1
+
+	        BoxLayout:
+	        	spacing: 10
+	        	orientation: 'vertical'
+
+				Lb:
+				    text: root.text_title_DNA_editor
+				    halign: 'center' 
+
+				TextInput: 
+					id: input_dna_editor
+					text: ''
+					background_normal: ''
+					background_color: color_textInput
+					size_hint_y: .1
+					on_text: root.keyboard_textInput()
+
+				Lb:
+					id: no_nucleotideo
+					text: ''
+					halign: 'right'
+
+				Lb:
+					text: ''
+					id: result_id
+
+				Lb:
+
+				Lb:
+					text: ''
+					id: name_amino_acids
+
+			BoxLayout: 
+				size_hint_y: 1. if root.width > root.height else 0
+		        size_hint_x: .6
+		        id: image_area
+				canvas.before:
+					Color:
+						rgba: 1,1,1,1
+					Rectangle:
+						pos: self.pos
+						size: self.size				
+
+		Lb:	
+			size_hint_y: .1 
+			id: information_dna
+			text: ''
+
+		BoxCols:
+
+			Bt:
+				text: root.text_back 
+				on_press: 
+					root.manager.transition.direction = 'right' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'menu'
+
+			Bt:
+				text: root.text_save
+				size_hint_x: .3
+				on_press: 
+					root.button_save_fasta()
+
+			Bt:
+				text: 'Gráfico' 
+				size_hint_x: .3 
+				on_press: root.button_graphic_gc()	
+				disabled: False if root.width > root.height else True
+
+			Bt:
+				text: "< / >" 
+				size_hint: (None, None)
+				height: '48dp'
+				width: '48dp'
+				on_press: root.button_example_code()
+
+
+<Screen_1_1>: 
+
+	Box_Screen:
+
+		GridScreen:
+	        cols: 2 if root.width > root.height else 1
+
+			RstDocument:
+            	text: root.text
+
+            BoxLayout:
+            	id: image_area
+            	size_hint_y: 1. if root.width > root.height else 0
+            	canvas.before:
+            		Color:
+            			rgba: 1,1,1,1
+            		Rectangle:
+            			pos: self.pos
+            			size: self.size
+
+		Bt:
+			text: root.text_back 
+			on_press: 
+				root.manager.transition.direction = 'up' 
+				root.manager.transition.duration = 1 
+				root.manager.current = 'screen_1'
+			
+
+##############################################################################################
+# Alinhamentos
+##############################################################################################
+
+<Screen_2>: 
+
+	Box_Screen:
+
+		GridScreen:
+	        cols: 2 if root.width > root.height else 1
+
+		    Bt:
+				text: root.text_name_algoritmo_4
+				background_color: color_button_2
+				color: color_text
+				text_size: cm(6), cm(4)
+			    halign: 'right' if root.width > root.height else 'left'
+			    valign: 'middle'
+				on_press: 
+					root.manager.transition.direction = 'left' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'screen_2_1'
+
+			Lb:
+				id: text_information_algoritmo_1
+				text: ''
+
+			Bt:
+				text: root.text_name_algoritmo_1
+				background_color: color_button_2
+				color: color_text
+				text_size: cm(6), cm(4)    
+			    halign: 'right' if root.width > root.height else 'left'
+			    valign: 'middle'
+				on_press: 
+					root.manager.transition.direction = 'left' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'screen_2_2'
+
+			Lb:
+				id: text_information_algoritmo_2
+        		text: ''
+
+			Bt:
+				text: root.text_name_algoritmo_2
+				background_color: color_button_2
+				color: color_text
+				text_size: cm(6), cm(4)    
+			    halign: 'right' if root.width > root.height else 'left'
+			    valign: 'middle'
+				on_press: 
+					root.manager.transition.direction = 'left' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'screen_2_3'
+
+			Lb:
+				id: text_information_algoritmo_3
+        		text: ''
+	
+			Bt:
+				text: root.text_name_algoritmo_3
+				background_color: color_button_2
+				color: color_text
+				text_size: cm(6), cm(4)   
+			    halign: 'right' if root.width > root.height else 'left'
+			    valign: 'middle'
+				on_press: 
+					root.manager.transition.direction = 'left' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'screen_2_4'
+
+			Lb:
+				id: text_information_algoritmo_4
+				text: ''
+		
+		BoxCols:
+		
+			Bt:
+				text: root.text_back
+				on_press: 
+					root.manager.transition.direction = 'right' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'menu'
+
+
+<Screen_2_1>: 
+
+	Box_Screen:
+	
+		GridScreen:
+	        cols: 1
+	
+			Lb:
+				text: root.text_dynamicProgramming
+				halign: 'center'
+				
+			Lb:
+				
+			Lb:
+				text: root.text_sequence_example
+				halign: 'center' 
+				
+			Lb:
+								
+			GridLayout:
+				cols: 2 if root.width > root.height else 1
+				spacing: 20
+				
+				BoxLayout:
+					orientation: 'vertical'
+					
+					GridLayout:
+						cols: 10
+						
+						Lb:
+							text: ''
+							halign: 'center'
+						
+						Lb:
+							text: ''
+							halign: 'center'
+						
+						Lb:
+							text: 'T'
+							halign: 'center'
+							
+						Lb:
+							text: 'G'
+							halign: 'center'
+							
+						Lb:
+							text: 'C' 
+							halign: 'center'
+							
+						Lb:
+							text: 'T'
+							halign: 'center'
+
+						Lb:
+							text: 'C'
+							halign: 'center'
+							
+						Lb:
+							text: 'G'
+							halign: 'center'
+							
+						Lb:
+							text: 'T' 
+							halign: 'center'
+							
+						Lb:
+							text: 'A'
+							halign: 'center'
+	 
+						Lb:
+							text: ''
+							halign: 'center'
+							size_hint_y: .1
+							
+						TextInput: 
+							id: input_value1
+							text: ''
+							background_color: ''
+							on_text: root.get_score1()
+							
+						TextInput: 
+							id: input_value2
+							text: ''
+							background_color: ''
+							on_text: root.get_score2() 
+							
+						TextInput: 
+							id: input_value3
+							text: ''
+							background_color: ''
+							on_text: root.get_score3() 
+							
+						TextInput: 
+							id: input_value4
+							text: ''
+							background_color: ''
+							on_text: root.get_score4() 
+							
+						TextInput: 
+							id: input_value5
+							text: ''
+							background_color: ''
+							on_text: root.get_score5()  
+							
+						TextInput: 
+							id: input_value6
+							text: ''
+							background_color: ''
+							on_text: root.get_score6()
+							
+						TextInput: 
+							id: input_value7
+							text: ''
+							background_color: ''
+							on_text: root.get_score7()
+
+						TextInput: 
+							id: input_value8
+							text: ''
+							background_color: ''
+							on_text: root.get_score8()
+							
+						TextInput: 
+							id: input_value9
+							text: ''
+							background_color: ''
+							on_text: root.get_score9()
+							
+						Lb:
+							text: 'T'
+							halign: 'center'
+							size_hint_y: .1
+							
+						TextInput: 
+							id: input_value10
+							text: ''
+							background_color: ''
+							on_text: root.get_score10()
+
+						TextInput: 
+							id: input_value11
+							text: ''
+							background_color: ''
+							on_text: root.get_score11()
+							
+						TextInput: 
+							id: input_value12
+							text: ''
+							background_color: ''
+							on_text: root.get_score12() 
+
+						TextInput: 
+							id: input_value13
+							text: ''
+							background_color: ''
+							on_text: root.get_score13() 
+							
+						TextInput: 
+							id: input_value14
+							text: ''
+							background_color: ''
+							on_text: root.get_score14() 
+
+						TextInput: 
+							id: input_value15
+							text: ''
+							background_color: ''
+							on_text: root.get_score15() 
+							
+						TextInput: 
+							id: input_value16
+							text: ''
+							background_color: ''
+							on_text: root.get_score16()
+
+						TextInput: 
+							id: input_value17
+							text: ''
+							background_color: ''
+							on_text: root.get_score17()
+							
+						TextInput: 
+							id: input_value18
+							text: ''
+							background_color: ''
+							on_text: root.get_score18()
+					
+						Lb:
+							text: 'T'
+							halign: 'center'
+							size_hint_y: .1
+							
+						TextInput: 
+							id: input_value19
+							text: ''
+							background_color: ''
+							on_text: root.get_score19()
+					 
+						TextInput: 
+							id: input_value20
+							text: ''
+							background_color: ''
+							on_text: root.get_score20()
+					 
+						TextInput: 
+							id: input_value21
+							text: ''
+							background_color: ''
+							on_text: root.get_score21()
+
+						TextInput: 
+							id: input_value22
+							text: ''
+							background_color: ''
+							on_text: root.get_score22()
+							
+						TextInput: 
+							id: input_value23
+							text: ''
+							background_color: ''
+							on_text: root.get_score23() 
+
+						TextInput: 
+							id: input_value24
+							text: ''
+							background_color: ''
+							on_text: root.get_score24() 
+							
+						TextInput: 
+							id: input_value25
+							text: ''
+							background_color: ''
+							on_text: root.get_score25() 
+
+						TextInput: 
+							id: input_value26
+							text: ''
+							background_color: ''
+							on_text: root.get_score26() 
+							
+						TextInput: 
+							id: input_value27
+							text: ''
+							background_color: ''
+							on_text: root.get_score27() 
+							
+						Lb:
+							text: 'C'
+							halign: 'center'
+							size_hint_y: .1
+							
+						TextInput: 
+							id: input_value28
+							text: ''
+							background_color: ''
+							on_text: root.get_score28()
+
+						TextInput: 
+							id: input_value29
+							text: ''
+							background_color: ''
+							on_text: root.get_score29()
+							
+						TextInput: 
+							id: input_value30
+							text: ''
+							background_color: ''
+							on_text: root.get_score30()
+
+						TextInput: 
+							id: input_value31
+							text: ''
+							background_color: ''
+							on_text: root.get_score31()
+							
+						TextInput: 
+							id: input_value32
+							text: ''
+							background_color: ''
+							on_text: root.get_score32() 
+
+						TextInput: 
+							id: input_value33
+							text: ''
+							background_color: ''
+							on_text: root.get_score33() 
+							
+						TextInput: 
+							id: input_value34
+							text: ''
+							background_color: ''
+							on_text: root.get_score34()  
+
+						TextInput: 
+							id: input_value35
+							text: ''
+							background_color: ''
+							on_text: root.get_score35() 
+							
+						TextInput: 
+							id: input_value36
+							text: ''
+							background_color: ''
+							on_text: root.get_score36() 
+							
+						Lb:
+							text: 'A'
+							halign: 'center'
+							size_hint_y: .1
+							
+						TextInput: 
+							id: input_value37
+							text: ''
+							background_color: ''
+							on_text: root.get_score37() 
+
+						TextInput: 
+							id: input_value38
+							text: ''
+							background_color: ''
+							on_text: root.get_score38() 
+							
+						TextInput: 
+							id: input_value39
+							text: ''
+							background_color: ''
+							on_text: root.get_score39() 
+							 
+						TextInput: 
+							id: input_value40
+							text: ''
+							background_color: ''
+							on_text: root.get_score40() 
+							
+						TextInput: 
+							id: input_value41
+							text: ''
+							background_color: ''
+							on_text: root.get_score41() 
+
+						TextInput: 
+							id: input_value42
+							text: ''
+							background_color: ''
+							on_text: root.get_score42() 
+							
+						TextInput: 
+							id: input_value43
+							text: ''
+							background_color: ''
+							on_text: root.get_score43() 
+
+						TextInput: 
+							id: input_value44
+							text: ''
+							background_color: ''
+							on_text: root.get_score44() 
+
+						TextInput: 
+							id: input_value45
+							text: ''
+							background_color: ''
+							on_text: root.get_score45() 
+							
+						Lb:
+							text: 'T'
+							halign: 'center'
+							size_hint_y: .1
+							
+						TextInput: 
+							id: input_value46
+							text: ''
+							background_color: ''
+							on_text: root.get_score46() 
+
+						TextInput: 
+							id: input_value47
+							text: ''
+							background_color: ''
+							on_text: root.get_score47() 
+							
+						TextInput: 
+							id: input_value48
+							text: ''
+							background_color: ''
+							on_text: root.get_score48() 
+
+						TextInput: 
+							id: input_value49
+							text: ''
+							background_color: ''
+							on_text: root.get_score49() 
+							
+						TextInput: 
+							id: input_value50
+							text: ''
+							background_color: ''
+							on_text: root.get_score50() 
+
+						TextInput: 
+							id: input_value51
+							text: ''
+							background_color: ''
+							on_text: root.get_score51() 
+							
+						TextInput: 
+							id: input_value52
+							text: ''
+							background_color: ''
+							on_text: root.get_score52() 
+
+						TextInput: 
+							id: input_value53
+							text: ''
+							background_color: ''
+							on_text: root.get_score53() 
+							
+						TextInput: 
+							id: input_value54
+							text: ''
+							background_color: ''
+							on_text: root.get_score54() 
+							
+						Lb:
+							text: 'A'
+							halign: 'center'
+							size_hint_y: .1
+							
+						TextInput: 
+							id: input_value55
+							text: ''
+							background_color: ''
+							on_text: root.get_score55() 
+
+						TextInput: 
+							id: input_value56
+							text: ''
+							background_color: ''
+							on_text: root.get_score56()  
+							
+						TextInput: 
+							id: input_value57
+							text: ''
+							background_color: ''
+							on_text: root.get_score57() 
+
+						TextInput: 
+							id: input_value58
+							text: ''
+							background_color: ''
+							on_text: root.get_score58() 
+							
+						TextInput: 
+							id: input_value59
+							text: ''
+							background_color: ''
+							on_text: root.get_score59() 
+
+						TextInput: 
+							id: input_value60
+							text: ''
+							background_color: ''
+							on_text: root.get_score60() 
+							
+						TextInput: 
+							id: input_value61
+							text: ''
+							background_color: ''
+							on_text: root.get_score61() 
+
+						TextInput: 
+							id: input_value62
+							text: ''
+							background_color: ''
+							on_text: root.get_score62() 
+							
+						TextInput: 
+							id: input_value63
+							text: ''
+							background_color: ''
+							on_text: root.get_score63() 
+											
+				BoxLayout:
+					size_hint: (.1, .03)
+					orientation: 'vertical' if root.width > root.height else 'horizontal'
+
+					Lb:
+						text: root.text_match
+						halign: 'left' if root.width > root.height else 'center'
+											
+					Lb:
+						text: root.text_mismatch
+						halign: 'left' if root.width > root.height else 'center'
+							
+					Lb:
+						text: root.text_gap
+						halign: 'left' if root.width > root.height else 'center'
+			Lb:
+
+			GridLayout:
+				cols: 8
+				size_hint_y: .2
+				canvas.before:
+			    	Color:
+			    		rgba: color_result
+			        Rectangle:
+			            pos: self.x, self.y + 1
+			            size: self.size
+
+				Lb:
+					id: result_id1
+					text: ''
+
+				Lb:
+					id: result_id2
+					text: ''
+
+				Lb:
+					id: result_id3
+					text: ''
+
+				Lb:
+					id: result_id4
+					text: ''
+
+				Lb:
+					id: result_id5
+					text: ''
+
+				Lb:
+					id: result_id6
+					text: ''
+			
+				Lb:
+					id: result_id7
+					text: ''
+
+				Lb:
+					id: result_id8
+					text: ''
+
+				Lb:
+					id: result_id9
+					text: ''
+
+				Lb:
+					id: result_id10
+					text: ''
+
+				Lb:
+					id: result_id11
+					text: ''
+
+				Lb:
+					id: result_id12
+					text: ''
+
+				Lb:
+					id: result_id13
+					text: ''
+
+				Lb:
+					id: result_id14
+					text: ''
+
+				Lb:
+					id: result_id15
+					text: ''
+
+				Lb:
+					id: result_id16
+					text: ''
+
+				Lb:
+					id: result_id17
+					text: ''
+
+				Lb:
+					id: result_id18
+					text: ''
+
+				Lb:
+					id: result_id19
+					text: ''
+				Lb:
+					id: result_id20
+					text: ''
+
+				Lb:
+					id: result_id21
+					text: ''
+
+				Lb:
+					id: result_id22
+					text: ''
+
+				Lb:
+					id: result_id23
+					text: ''
+
+				Lb:
+					id: result_id24
+					text: ''
+		Lb:
+
+		BoxCols:
+
+			Bt:
+				text: root.text_back 
+				on_press: 
+					root.manager.transition.direction = 'right' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'screen_2'
+
+			Bt:
+				text: "< / >" 
+				size_hint: (None, None)
+				height: '48dp'
+				width: '48dp'
+				on_press: 
+					root.manager.transition.direction = 'down' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'screen_2_1_1'
+
+
+<Screen_2_1_1>: 
+
+	Box_Screen:
+
+		GridScreen:
+			cols: 1 
+
+			RstDocument:
+            	text: root.text
+
+		Bt:
+			text: root.text_back 
+			on_press: 
+				root.manager.transition.direction = 'up' 
+				root.manager.transition.duration = 1 
+				root.manager.current = 'screen_2_1'
+
+
+<Screen_2_2>:
+
+	Box_Screen:
+
+		GridScreen:
+			cols: 1
+
+			Lb:
+		        text: root.text_title_NeedlemanWunsc
+		        halign: 'center' 
+
+		    GridLayout:
+		        cols: 2 if root.width > root.height else 1
+		        spacing: 20
+		        size_hint_y: .5
+
+				Lb:
+			        text: root.text_sequence_A
+			        size_hint: (None, None)
+			        size_hint_x: .1
+			        size_hint_y: .05
+
+				TextInput: 
+					id: input_1
+			        text: ''
+			        background_normal: ''
+			        background_color: color_textInput
+			        size_hint_y: .3
+			        on_text: 
+			        	root.lcs() 
+			        	root.keyboard_textInput()
+
+			    Lb:
+			        text: root.text_sequence_B
+			        size_hint: (None, None)
+			        size_hint_x: .1
+			        size_hint_y: .05
+
+			    TextInput:
+			        id: input_2
+			        text: ''
+					background_normal: ''
+			        background_color: color_textInput
+			        size_hint_y: .3
+			        on_text: 
+			        	root.lcs() 
+			        	root.keyboard_textInput2()
+			        disabled: False
+
+		    Lb:
+			    id: no_nucleotideo
+			    text: ''
+			    halign: 'right' 
+
+		    Lb:
+		        id: result_1
+		        text: ''
+
+		    Box:
+				size_hint_y: .08
+				canvas.before:
+			    	Color:
+			    		rgba: color_result
+			        Rectangle:
+			            pos: self.x, self.y + 1
+			            size: self.size
+
+				Lb:
+				    id: result_2
+				    text: ''
+
+		BoxCols:
+
+			Bt:
+				text: root.text_back 
+				size_hint_x: .6
+				on_press: 
+					root.manager.transition.direction = 'right' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'screen_2'
+
+			Sp:
+			    id: spinner_id 
+		        text: 'DNA'
+		        size_hint: (None, None)
+				height: '48dp'
+				width: '100dp'
+		        values: (root.text_spinner_dna, root.text_spinner_rna, root.text_spinner_amino_acids)
+
+			Bt:
+				text: "< / >" 
+				size_hint: (None, None)
+				height: '48dp'
+				width: '48dp'
+				on_press: 
+					root.manager.transition.direction = 'down' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'screen_2_2_1'
+
+
+<Screen_2_2_1>: 
+
+	Box_Screen:
+
+		GridScreen:
+			cols: 2 if root.width > root.height else 1
+
+			RstDocument:
+            	text: root.text
+
+		Bt:
+			text: root.text_back 
+			on_press: 
+				root.manager.transition.direction = 'up' 
+				root.manager.transition.duration = 1 
+				root.manager.current = 'screen_2_2'
+
+
+<Screen_2_3>: 
+
+	Box_Screen:
+
+		GridScreen:
+			cols: 1
+
+			Lb:
+		        text: root.text_title_SmithWaterman
+		        halign: 'center' 
+
+		    GridLayout:
+		        cols: 2 if root.width > root.height else 1
+		        spacing: 20
+		        size_hint_y: .5
+
+				Lb:
+			        text: root.text_sequence_A
+			        size_hint: (None, None)
+			        size_hint_x: .1
+			        size_hint_y: .05
+
+				TextInput: 
+					id: input_1
+			        text: ''
+			        background_normal: ''
+			        background_color: color_textInput
+			        size_hint_y: .3
+			        on_text: 
+			        	root.lcs() 
+			        	root.keyboard_textInput()
+
+			    Lb:
+			        text: root.text_sequence_B
+			        size_hint: (None, None)
+			        size_hint_x: .1
+			        size_hint_y: .05
+
+			    TextInput:
+			        id: input_2
+			        text: ''
+					background_normal: ''
+			        background_color: color_textInput
+			        size_hint_y: .3
+			        on_text: 
+			        	root.lcs() 
+			        	root.keyboard_textInput2()
+			        disabled: False
+
+		    Lb:
+			    id: no_nucleotideo
+			    text: ''
+			    halign: 'right' 
+
+		    Lb:
+		        id: result_1
+		        text: ''
+
+		    Box:
+				size_hint_y: .08
+				canvas.before:
+			    	Color:
+			    		rgba: color_result
+			        Rectangle:
+			            pos: self.x, self.y + 1
+			            size: self.size
+
+				Lb:
+				    id: result_2
+				    text: ''
+
+		BoxCols:
+
+			Bt:
+				text: root.text_back 
+				size_hint_x: .6
+				on_press: 
+					root.manager.transition.direction = 'right' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'screen_2'
+
+			Sp:
+			    id: spinner_id 
+		        text: 'DNA'
+		        size_hint: (None, None)
+				height: '48dp'
+				width: '100dp'
+		        values: (root.text_spinner_dna, root.text_spinner_rna, root.text_spinner_amino_acids)
+
+			Bt:
+				text: "< / >" 
+				size_hint: (None, None)
+				height: '48dp'
+				width: '48dp'
+				on_press: 
+					root.manager.transition.direction = 'down' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'screen_2_2_1'
+
+
+<Screen_2_3_1>: 
+
+	Box_Screen:
+
+		GridScreen:
+			cols: 2 if root.width > root.height else 1
+
+			RstDocument:
+            	text: root.text
+
+		Bt:
+			text: root.text_back 
+			on_press: 
+				root.manager.transition.direction = 'up' 
+				root.manager.transition.duration = 1 
+				root.manager.current = 'screen_2_3'
+
+
+<Screen_2_4>: 
+
+	Box_Screen:
+
+		GridScreen:
+			cols: 1
+
+			Lb:
+		        text: root.text_title_blast
+		        halign: 'center' 
+
+		    Lb:
+			    text: root.text_sequence_A
+			    size_hint: (None, None)
+			    size_hint_x: .1
+			    size_hint_y: .05
+
+			TextInput: 
+				id: input_sequence_A
+			    text: ''
+			    background_normal: ''
+			    background_color: color_textInput
+			    size_hint_y: .3
+
+			Lb:
+			    text: root.text_sequence_B
+			    size_hint: (None, None)
+			    size_hint_x: .1
+			    size_hint_y: .05
+
+			TextInput: 
+				id: input_sequence_B
+			    text: ''
+			    background_normal: ''
+			    background_color: color_textInput
+			    size_hint_y: .3
+
+			Lb:
+				id: information_id
+		        text: ''
+		        halign: 'center' if root.width > root.height else 'right'
+
+			Bt:
+				text: root.text_blast 
+				background_color: color_button_2
+				on_press: 
+					root.keyboard_textInput()
+					root.button_blast()
+
+		BoxCols:
+
+			Bt:
+				text: root.text_back 
+				on_press: 
+					root.manager.transition.direction = 'right' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'menu'
+
+			Sp:
+			    id: spinner_id 
+		        text: root.text_spinner_blastn
+		        size_hint: (None, None)
+				height: '48dp'
+				width: '100dp'
+		        values: (root.text_spinner_blastn, root.text_spinner_blastp, root.text_spinner_blastx, root.text_spinner_tblastn, root.text_spinner_tblastx)
+
+			Bt:
+				text: "< / >" 
+				size_hint: (None, None)
+				height: '48dp'
+				width: '48dp'
+				on_press: 
+					root.manager.transition.direction = 'down' 
+					root.manager.transition.duration = 1 
+					root.manager.current = 'screen_2_4_1'
+
+
+<Screen_2_4_1>: 
+
+	Box_Screen:
+
+		GridScreen:
+			cols: 2 if root.width > root.height else 1
+
+			RstDocument:
+            	text: root.text
+
+            RstDocument:
+            	text: root.text2
+            	size_hint_y: 1. if root.width > root.height else 0
+
+		Bt:
+			text: root.text_back 
+			on_press: 
+				root.manager.transition.direction = 'up' 
+				root.manager.transition.duration = 1 
+				root.manager.current = 'screen_2_4'
+
+
+##############################################################################################
+# Tela do Vocabulário
+##############################################################################################
+
+<Screen_3>: 
+
+	Box_Screen:
+
+		GridScreen:
+			cols: 2 if root.width > root.height else 1
+
+			RstDocument:
+            	text: root.text
+
+		Bt:
+			text: root.text_back 
+			on_press: 
+				root.manager.transition.direction = 'right' 
+				root.manager.transition.duration = 1 
+				root.manager.current = 'menu'

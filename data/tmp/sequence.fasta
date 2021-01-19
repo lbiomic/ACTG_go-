@@ -1,0 +1,192 @@
+AF297471.1 Brassica napus BN28a (BN28a) gene, complete cds
+
+Ademina: 155
+Citosina: 89
+Guanina: 116
+Timina: 137
+Total de Números de Bases: 634
+Error: 0
+GC: 41.2 | AT: 58.8
+
+> DNA
+ATGGCAGACAACAAGCAGAGCTTCCAAGCCGGTCAAGCCGCTGGTCGTGCTGAGGTCTCTTTCTCTCTTTAACTCTCTGATCAAATGCAGTTGCTGCGGTTAAACAATCACACTTTATAAAATAAAGAGAAGTTATTTATATTTTCTTGAACCAAGTAAATGAATGTATTTTGACCAAAAAAAGAAGAAGTAAATGAATGTATTAATTGATTTCGTGTGGACAATGGTGTGTAAATATAGGAGAAGGGTAATGTGCTGATGGACAAGGTCAAGGATGCTGCTACCGCAGCTGGAGCGTCTGCGCAAACCGTAAGCGATCTACCCCATGATATATAAATAAACATACGTCTCTACTCTCTACTGTACATGTTCGTAGATCTCATATCTTTTTATGCTGTTCTAACATGTATTTACGTTTATAGGCGGGACAGAAGATAACGGAGGCGGCAGGGGGAGCCGTTAATCTCGTGAAGGAGAAGACCGGCATGAACAAGTAG
+
+> DNA Complement
+TACCGTCTGTTGTTCGTCTCGAAGGTTCGGCCAGTTCGGCGACCAGCACGACTCCAGAGAAAGAGAGAAATTGAGAGACTAGTTTACGTCAACGACGCCAATTTGTTAGTGTGAAATATTTTATTTCTCTTCAATAAATATAAAAGAACTTGGTTCATTTACTTACATAAAACTGGTTTTTTTCTTCTTCATTTACTTACATAATTAACTAAAGCACACCTGTTACCACACATTTATATCCTCTTCCCATTACACGACTACCTGTTCCAGTTCCTACGACGATGGCGTCGACCTCGCAGACGCGTTTGGCATTCGCTAGATGGGGTACTATATATTTATTTGTATGCAGAGATGAGAGATGACATGTACAAGCATCTAGAGTATAGAAAAATACGACAAGATTGTACATAAATGCAAATATCCGCCCTGTCTTCTATTGCCTCCGCCGTCCCCCTCGGCAATTAGAGCACTTCCTCTTCTGGCCGTACTTGTTCATC
+
+> DNA Reverse Complement
+CTACTTGTTCATGCCGGTCTTCTCCTTCACGAGATTAACGGCTCCCCCTGCCGCCTCCGTTATCTTCTGTCCCGCCTATAAACGTAAATACATGTTAGAACAGCATAAAAAGATATGAGATCTACGAACATGTACAGTAGAGAGTAGAGACGTATGTTTATTTATATATCATGGGGTAGATCGCTTACGGTTTGCGCAGACGCTCCAGCTGCGGTAGCAGCATCCTTGACCTTGTCCATCAGCACATTACCCTTCTCCTATATTTACACACCATTGTCCACACGAAATCAATTAATACATTCATTTACTTCTTCTTTTTTTGGTCAAAATACATTCATTTACTTGGTTCAAGAAAATATAAATAACTTCTCTTTATTTTATAAAGTGTGATTGTTTAACCGCAGCAACTGCATTTGATCAGAGAGTTAAAGAGAGAAAGAGACCTCAGCACGACCAGCGGCTTGACCGGCTTGGAAGCTCTGCTTGTTGTCTGCCAT
+
+> RNA
+AUGGCAGACAACAAGCAGAGCUUCCAAGCCGGUCAAGCCGCUGGUCGUGCUGAGGUCUCUUUCUCUCUUUAACUCUCUGAUCAAAUGCAGUUGCUGCGGUUAAACAAUCACACUUUAUAAAAUAAAGAGAAGUUAUUUAUAUUUUCUUGAACCAAGUAAAUGAAUGUAUUUUGACCAAAAAAAGAAGAAGUAAAUGAAUGUAUUAAUUGAUUUCGUGUGGACAAUGGUGUGUAAAUAUAGGAGAAGGGUAAUGUGCUGAUGGACAAGGUCAAGGAUGCUGCUACCGCAGCUGGAGCGUCUGCGCAAACCGUAAGCGAUCUACCCCAUGAUAUAUAAAUAAACAUACGUCUCUACUCUCUACUGUACAUGUUCGUAGAUCUCAUAUCUUUUUAUGCUGUUCUAACAUGUAUUUACGUUUAUAGGCGGGACAGAAGAUAACGGAGGCGGCAGGGGGAGCCGUUAAUCUCGUGAAGGAGAAGACCGGCAUGAACAAGUAG
+
+> Amino Acids
+MADNKQSFQAGQAAGRAEVSFSL*LSDQMQLLRLNNHTL*NKEKLFIFS*TK*MNVF*PKKEEVNECIN*FRVDNGV*I*EKGNVLMDKVKDAATAAGASAQTVSDLPHDI*INIRLYSLLYMFVDLISFYAVLTCIYVYRRDRR*RRRQGEPLIS*RRRPA*TS
+
+Extended Name of Amino Acids:
+
+M = Met = Metionina = Ácido 2-amino-3-metiltio-n-butírico
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+D = Asp = Aspartato ou Ácido aspártico = Ácido 2-aminossuccínico ou Ácido 2-amino-butanodióico
+N = Asn = Asparagina = Ácido 2-aminossuccionâmico
+K = Lys, Lis = Lisina = Ácido 2,6-diaminocapróico ou Ácido 2, 6-diaminoexanóico
+Q = Gln = Glutamina = Ácido 2-aminoglutarâmico
+S = Ser = Serina = Ácido 2-amino-3-hidroxi-propiônico ou Ácido 2-amino-3-hidroxi-propanóico
+F = Phe ou Fen = Fenilalanina = Ácido 2-amino-3-fenil-propiônico ou Ácido 2-amino-3-fenil-propanóico
+Q = Gln = Glutamina = Ácido 2-aminoglutarâmico
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+G = Gly, Gli = Glicina ou Glicocola = Ácido 2-aminoacético ou Ácido 2-amino-etanóico
+Q = Gln = Glutamina = Ácido 2-aminoglutarâmico
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+G = Gly, Gli = Glicina ou Glicocola = Ácido 2-aminoacético ou Ácido 2-amino-etanóico
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+E = Glu = Glutamato ou Ácido glutâmico = Ácido 2-aminoglutárico
+V = Val = Valina = Ácido 2-aminovalérico ou Ácido 2-amino-3-metil-butanóico
+S = Ser = Serina = Ácido 2-amino-3-hidroxi-propiônico ou Ácido 2-amino-3-hidroxi-propanóico
+F = Phe ou Fen = Fenilalanina = Ácido 2-amino-3-fenil-propiônico ou Ácido 2-amino-3-fenil-propanóico
+S = Ser = Serina = Ácido 2-amino-3-hidroxi-propiônico ou Ácido 2-amino-3-hidroxi-propanóico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+* = Stop
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+S = Ser = Serina = Ácido 2-amino-3-hidroxi-propiônico ou Ácido 2-amino-3-hidroxi-propanóico
+D = Asp = Aspartato ou Ácido aspártico = Ácido 2-aminossuccínico ou Ácido 2-amino-butanodióico
+Q = Gln = Glutamina = Ácido 2-aminoglutarâmico
+M = Met = Metionina = Ácido 2-amino-3-metiltio-n-butírico
+Q = Gln = Glutamina = Ácido 2-aminoglutarâmico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+N = Asn = Asparagina = Ácido 2-aminossuccionâmico
+N = Asn = Asparagina = Ácido 2-aminossuccionâmico
+H = His = Histidina = Ácido 2-amino-3-imidazolpropiônico
+T = Thr, Tre = Treonina = Ácido 2-amino-3-hidroxi-n-butírico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+* = Stop
+N = Asn = Asparagina = Ácido 2-aminossuccionâmico
+K = Lys, Lis = Lisina = Ácido 2,6-diaminocapróico ou Ácido 2, 6-diaminoexanóico
+E = Glu = Glutamato ou Ácido glutâmico = Ácido 2-aminoglutárico
+K = Lys, Lis = Lisina = Ácido 2,6-diaminocapróico ou Ácido 2, 6-diaminoexanóico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+F = Phe ou Fen = Fenilalanina = Ácido 2-amino-3-fenil-propiônico ou Ácido 2-amino-3-fenil-propanóico
+I = Ile = Isoleucina = Ácido 2-amino-3-metil-n-valérico ou ácido 2-amino-3-metil-pentanóico
+F = Phe ou Fen = Fenilalanina = Ácido 2-amino-3-fenil-propiônico ou Ácido 2-amino-3-fenil-propanóico
+S = Ser = Serina = Ácido 2-amino-3-hidroxi-propiônico ou Ácido 2-amino-3-hidroxi-propanóico
+* = Stop
+T = Thr, Tre = Treonina = Ácido 2-amino-3-hidroxi-n-butírico
+K = Lys, Lis = Lisina = Ácido 2,6-diaminocapróico ou Ácido 2, 6-diaminoexanóico
+* = Stop
+M = Met = Metionina = Ácido 2-amino-3-metiltio-n-butírico
+N = Asn = Asparagina = Ácido 2-aminossuccionâmico
+V = Val = Valina = Ácido 2-aminovalérico ou Ácido 2-amino-3-metil-butanóico
+F = Phe ou Fen = Fenilalanina = Ácido 2-amino-3-fenil-propiônico ou Ácido 2-amino-3-fenil-propanóico
+* = Stop
+P = Pro = Prolina = Ácido pirrolidino-2-carboxílíco
+K = Lys, Lis = Lisina = Ácido 2,6-diaminocapróico ou Ácido 2, 6-diaminoexanóico
+K = Lys, Lis = Lisina = Ácido 2,6-diaminocapróico ou Ácido 2, 6-diaminoexanóico
+E = Glu = Glutamato ou Ácido glutâmico = Ácido 2-aminoglutárico
+E = Glu = Glutamato ou Ácido glutâmico = Ácido 2-aminoglutárico
+V = Val = Valina = Ácido 2-aminovalérico ou Ácido 2-amino-3-metil-butanóico
+N = Asn = Asparagina = Ácido 2-aminossuccionâmico
+E = Glu = Glutamato ou Ácido glutâmico = Ácido 2-aminoglutárico
+C = Cys, Cis = Cisteina = Ácido 2-bis-(2-amino-propiônico)-3-dissulfeto ou Ácido 3-tiol-2-amino-propanóico
+I = Ile = Isoleucina = Ácido 2-amino-3-metil-n-valérico ou ácido 2-amino-3-metil-pentanóico
+N = Asn = Asparagina = Ácido 2-aminossuccionâmico
+* = Stop
+F = Phe ou Fen = Fenilalanina = Ácido 2-amino-3-fenil-propiônico ou Ácido 2-amino-3-fenil-propanóico
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+V = Val = Valina = Ácido 2-aminovalérico ou Ácido 2-amino-3-metil-butanóico
+D = Asp = Aspartato ou Ácido aspártico = Ácido 2-aminossuccínico ou Ácido 2-amino-butanodióico
+N = Asn = Asparagina = Ácido 2-aminossuccionâmico
+G = Gly, Gli = Glicina ou Glicocola = Ácido 2-aminoacético ou Ácido 2-amino-etanóico
+V = Val = Valina = Ácido 2-aminovalérico ou Ácido 2-amino-3-metil-butanóico
+* = Stop
+I = Ile = Isoleucina = Ácido 2-amino-3-metil-n-valérico ou ácido 2-amino-3-metil-pentanóico
+* = Stop
+E = Glu = Glutamato ou Ácido glutâmico = Ácido 2-aminoglutárico
+K = Lys, Lis = Lisina = Ácido 2,6-diaminocapróico ou Ácido 2, 6-diaminoexanóico
+G = Gly, Gli = Glicina ou Glicocola = Ácido 2-aminoacético ou Ácido 2-amino-etanóico
+N = Asn = Asparagina = Ácido 2-aminossuccionâmico
+V = Val = Valina = Ácido 2-aminovalérico ou Ácido 2-amino-3-metil-butanóico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+M = Met = Metionina = Ácido 2-amino-3-metiltio-n-butírico
+D = Asp = Aspartato ou Ácido aspártico = Ácido 2-aminossuccínico ou Ácido 2-amino-butanodióico
+K = Lys, Lis = Lisina = Ácido 2,6-diaminocapróico ou Ácido 2, 6-diaminoexanóico
+V = Val = Valina = Ácido 2-aminovalérico ou Ácido 2-amino-3-metil-butanóico
+K = Lys, Lis = Lisina = Ácido 2,6-diaminocapróico ou Ácido 2, 6-diaminoexanóico
+D = Asp = Aspartato ou Ácido aspártico = Ácido 2-aminossuccínico ou Ácido 2-amino-butanodióico
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+T = Thr, Tre = Treonina = Ácido 2-amino-3-hidroxi-n-butírico
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+G = Gly, Gli = Glicina ou Glicocola = Ácido 2-aminoacético ou Ácido 2-amino-etanóico
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+S = Ser = Serina = Ácido 2-amino-3-hidroxi-propiônico ou Ácido 2-amino-3-hidroxi-propanóico
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+Q = Gln = Glutamina = Ácido 2-aminoglutarâmico
+T = Thr, Tre = Treonina = Ácido 2-amino-3-hidroxi-n-butírico
+V = Val = Valina = Ácido 2-aminovalérico ou Ácido 2-amino-3-metil-butanóico
+S = Ser = Serina = Ácido 2-amino-3-hidroxi-propiônico ou Ácido 2-amino-3-hidroxi-propanóico
+D = Asp = Aspartato ou Ácido aspártico = Ácido 2-aminossuccínico ou Ácido 2-amino-butanodióico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+P = Pro = Prolina = Ácido pirrolidino-2-carboxílíco
+H = His = Histidina = Ácido 2-amino-3-imidazolpropiônico
+D = Asp = Aspartato ou Ácido aspártico = Ácido 2-aminossuccínico ou Ácido 2-amino-butanodióico
+I = Ile = Isoleucina = Ácido 2-amino-3-metil-n-valérico ou ácido 2-amino-3-metil-pentanóico
+* = Stop
+I = Ile = Isoleucina = Ácido 2-amino-3-metil-n-valérico ou ácido 2-amino-3-metil-pentanóico
+N = Asn = Asparagina = Ácido 2-aminossuccionâmico
+I = Ile = Isoleucina = Ácido 2-amino-3-metil-n-valérico ou ácido 2-amino-3-metil-pentanóico
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+Y = Tyr, Tir = Tirosina = Ácido 2-amino-3-(p-hidroxifenil)propiônico ou paraidroxifenilalanina
+S = Ser = Serina = Ácido 2-amino-3-hidroxi-propiônico ou Ácido 2-amino-3-hidroxi-propanóico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+Y = Tyr, Tir = Tirosina = Ácido 2-amino-3-(p-hidroxifenil)propiônico ou paraidroxifenilalanina
+M = Met = Metionina = Ácido 2-amino-3-metiltio-n-butírico
+F = Phe ou Fen = Fenilalanina = Ácido 2-amino-3-fenil-propiônico ou Ácido 2-amino-3-fenil-propanóico
+V = Val = Valina = Ácido 2-aminovalérico ou Ácido 2-amino-3-metil-butanóico
+D = Asp = Aspartato ou Ácido aspártico = Ácido 2-aminossuccínico ou Ácido 2-amino-butanodióico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+I = Ile = Isoleucina = Ácido 2-amino-3-metil-n-valérico ou ácido 2-amino-3-metil-pentanóico
+S = Ser = Serina = Ácido 2-amino-3-hidroxi-propiônico ou Ácido 2-amino-3-hidroxi-propanóico
+F = Phe ou Fen = Fenilalanina = Ácido 2-amino-3-fenil-propiônico ou Ácido 2-amino-3-fenil-propanóico
+Y = Tyr, Tir = Tirosina = Ácido 2-amino-3-(p-hidroxifenil)propiônico ou paraidroxifenilalanina
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+V = Val = Valina = Ácido 2-aminovalérico ou Ácido 2-amino-3-metil-butanóico
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+T = Thr, Tre = Treonina = Ácido 2-amino-3-hidroxi-n-butírico
+C = Cys, Cis = Cisteina = Ácido 2-bis-(2-amino-propiônico)-3-dissulfeto ou Ácido 3-tiol-2-amino-propanóico
+I = Ile = Isoleucina = Ácido 2-amino-3-metil-n-valérico ou ácido 2-amino-3-metil-pentanóico
+Y = Tyr, Tir = Tirosina = Ácido 2-amino-3-(p-hidroxifenil)propiônico ou paraidroxifenilalanina
+V = Val = Valina = Ácido 2-aminovalérico ou Ácido 2-amino-3-metil-butanóico
+Y = Tyr, Tir = Tirosina = Ácido 2-amino-3-(p-hidroxifenil)propiônico ou paraidroxifenilalanina
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+D = Asp = Aspartato ou Ácido aspártico = Ácido 2-aminossuccínico ou Ácido 2-amino-butanodióico
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+* = Stop
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+Q = Gln = Glutamina = Ácido 2-aminoglutarâmico
+G = Gly, Gli = Glicina ou Glicocola = Ácido 2-aminoacético ou Ácido 2-amino-etanóico
+E = Glu = Glutamato ou Ácido glutâmico = Ácido 2-aminoglutárico
+P = Pro = Prolina = Ácido pirrolidino-2-carboxílíco
+L = Leu = Leucina = Ácido 2-aminoisocapróico ou Ácido 2-amino-4-metil-pentanóico
+I = Ile = Isoleucina = Ácido 2-amino-3-metil-n-valérico ou ácido 2-amino-3-metil-pentanóico
+S = Ser = Serina = Ácido 2-amino-3-hidroxi-propiônico ou Ácido 2-amino-3-hidroxi-propanóico
+* = Stop
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+R = Arg = Arginina = Ácido 2-amino-4-guanidina-n-valérico
+P = Pro = Prolina = Ácido pirrolidino-2-carboxílíco
+A = Ala = Alanina = Ácido 2-aminopropiônico ou Ácido 2-amino-propanóico
+* = Stop
+T = Thr, Tre = Treonina = Ácido 2-amino-3-hidroxi-n-butírico
+S = Ser = Serina = Ácido 2-amino-3-hidroxi-propiônico ou Ácido 2-amino-3-hidroxi-propanóico

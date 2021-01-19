@@ -1,0 +1,29 @@
+.. code:: python
+    
+    from Bio.Blast.Applications import *
+    
+    # Exemplo de comandos:
+    # NcbiblastnCommandline  --> blastn
+    # NcbiblastpCommandline  --> blastp
+    # NcbiblastxCommandline  --> blastx
+    # NcbitblastnCommandline --> tblastn
+    # NcbitblastxCommandline --> tblastx
+    
+    # Executar 
+    comando_blastn = NcbiblastxCommandline(
+        query="exemplo.fasta", subject="exemplo2.fasta", 
+        outfmt=0, out="out.txt")
+    
+    # Mostrar na tela a saída a execução do comando
+    print(comando_blastn)
+    
+    # Guardar valores nas variáveis
+    stdout, stderr = comando_blastn()
+    
+    # Abrir arquivo em .txt
+    blast_result = open("out.txt","r")
+    
+    # Imprimir na tela
+    linhas = blast_result.read()
+    print(linhas)
+    
