@@ -338,7 +338,7 @@ class Screen_1(Screen):
 
             # Remover primeira linha ">"
             file = open(fasta, 'r')
-            fist_line = file.readline() # Primeira Linha
+            fist_line = file.readline()  # Primeira Linha
             for line in file:
                 if line.find('>') != 0:
                     relist.append(line)
@@ -424,9 +424,10 @@ class Screen_1(Screen):
             file.writelines('> ' + 'DNA Reverse Complement' + '\n' +
                             str(dna_reverse_complement) + '\n\n')
             file.writelines('> ' + 'RNA' + '\n' + str(rna) + '\n\n')
-            file.writelines('> ' + 'Amino Acids' + '\n' + str(rna_protein) + '\n\n')
+            file.writelines('> ' + 'Amino Acids' + '\n' +
+                            str(rna_protein) + '\n\n')
             file.writelines('Extended Name of Amino Acids:' + '\n\n')
- 
+
             # Nome dos Aminoácidos
             for n in rna_protein:
                 if n == 'G':
