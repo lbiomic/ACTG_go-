@@ -4,4 +4,5 @@ ACTG_go! Tem como bojetivo de construir uma experiência de formação de um bio
 
 O programa é escrito em Python e também esta usando a biblioteca kivy (que é uma biblioteca open source escrita em Python para o desenvolvimento de aplicativos móveis ou desktop).
 
-![Screenshot](data/screenshot/screenshot.gif)
+<img src="/data/screenshort/screenshort.gif" alt="ACTG_go!"/>
+
