@@ -8,15 +8,48 @@ Comput Biol 2000; 7(1-2):203-14.
 
 
 Database: User specified sequence set (Input: data/tmp/sequence_B.fasta).
-           1 sequences; 8 total letters
+           1 sequences; 315 total letters
 
 
 
 Query= 
-Length=11
+Length=315
+                                                                      Score        E
+Sequences producing significant alignments:                          (Bits)     Value
+
+                                                                      582        3e-171
 
 
-***** No hits found *****
+> 
+Length=315
+
+ Score = 582 bits (315),  Expect = 3e-171
+ Identities = 315/315 (100%), Gaps = 0/315 (0%)
+ Strand=Plus/Plus
+
+Query  1    AGAAGAAGTAAATGAATGTATTAATTGATTTCGTGTGGACAATGGTGTGTAAATATAGGA  60
+            ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct  1    AGAAGAAGTAAATGAATGTATTAATTGATTTCGTGTGGACAATGGTGTGTAAATATAGGA  60
+
+Query  61   GAAGGGTAATGTGCTGATGGACAAGGTCAAGGATGCTGCTACCGCAGCTGGAGCGTCTGC  120
+            ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct  61   GAAGGGTAATGTGCTGATGGACAAGGTCAAGGATGCTGCTACCGCAGCTGGAGCGTCTGC  120
+
+Query  121  GCAAACCGTAAGCGATCTACCCCATGATATATAAATAAACATACGTCTCTACTCTCTACT  180
+            ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct  121  GCAAACCGTAAGCGATCTACCCCATGATATATAAATAAACATACGTCTCTACTCTCTACT  180
+
+Query  181  GTACATGTTCGTAGATCTCATATCTTTTTATGCTGTTCTAACATGTATTTACGTTTATAG  240
+            ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct  181  GTACATGTTCGTAGATCTCATATCTTTTTATGCTGTTCTAACATGTATTTACGTTTATAG  240
+
+Query  241  GCGGGACAGAAGATAACGGAGGCGGCAGGGGGAGCCGTTAATCTCGTGAAGGAGAAGACC  300
+            ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+Sbjct  241  GCGGGACAGAAGATAACGGAGGCGGCAGGGGGAGCCGTTAATCTCGTGAAGGAGAAGACC  300
+
+Query  301  GGCATGAACAAGTAG  315
+            |||||||||||||||
+Sbjct  301  GGCATGAACAAGTAG  315
 
 
 
@@ -27,12 +60,12 @@ Gapped
 Lambda      K        H
     1.28    0.460    0.850 
 
-Effective search space used: 70
+Effective search space used: 93025
 
 
   Database: User specified sequence set (Input: data/tmp/sequence_B.fasta).
     Posted date:  Unknown
-  Number of letters in database: 8
+  Number of letters in database: 315
   Number of sequences in database:  1
 
 

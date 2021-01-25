@@ -8,9 +8,9 @@ ACTG_go!
 Demonstrações Educacionais para Bioinformática
 =============
 
-Construir experiência de formação para a compreensão de alguns algoritmos de bioinformática mais usados. 
-Tal formação consolida os esforços adotados pela ENAM, que por meio deste programa eleva o nível destas discussões 
-com a sociedade, e correlaciona as ações de educação a distância na UnB adaptando à realidade profissional dos envolvidos, 
+Construir experiência de formação para a compreensão de alguns algoritmos de bioinformática mais usados.
+Tal formação consolida os esforços adotados pela ENAM, que por meio deste programa eleva o nível destas discussões
+com a sociedade, e correlaciona as ações de educação a distância na UnB adaptando à realidade profissional dos envolvidos,
 priorizando a interação e a troca de experiências entre magistrados, advogados e demais voluntários atuantes nesta área.
 
 '''
@@ -24,10 +24,14 @@ import webbrowser  # Navegador
 from io import BytesIO
 from data.scripts.image_editor import ed  # Módulo
 import pylab
-from Bio.Blast.Applications import *
+from Bio.Blast.Applications import *  # Biopython
 from Bio.SeqUtils import GC
 from Bio import SeqIO
-from Bio.Seq import Seq  # Biopython
+from Bio.Seq import Seq
+from Bio import pairwise2
+from Bio.pairwise2 import format_alignment
+from Bio import Align
+from Bio.Align import substitution_matrices
 from kivy.clock import Clock
 from kivy.utils import get_color_from_hex
 from kivy.core.image import Image as CoreImage
@@ -44,6 +48,9 @@ from kivy.uix.widget import Widget
 import kivy
 import os
 import re
+
+#
+substitution_matrices = substitution_matrices.load('BLOSUM62')
 
 kivy.require('1.11.1')
 
@@ -90,28 +97,38 @@ elif language == 'PT-BR':
     text_message_fasta_1 = 'Arquivo gerado no formato FASTA'
     text_title_popup = 'Atenção!'
     text_mensage_error_codon = 'Erro em gerar Codon!'
-    # Tela do Algoritmo Needleman-Wunsch
+    # Tela do Algoritmos
     text_title_NeedlemanWunsc = "[color=#000000][size=22][b]Algoritmo Needleman-Wunsch[/b][/size][/color]"
     text_title_SmithWaterman = "[color=#000000][size=22][b]Algoritmo Smith-Waterman[/b][/size][/color]"
     text_sequence_A = "[b]Sequência A:[/b]"
     text_sequence_B = "[b]Sequência B:[/b]"
-    text_result = "[b]Resultado:[/b]"
     text_no_nucleotideo_dna = "[color=#ff0000] --> Erro, não pertence a cadeia de DNA![/color]"
     text_no_nucleotideo_rna = "[color=#ff0000] --> Erro, não pertence a cadeia de RNA![/color]"
     text_no_amino_acids = "[color=#ff0000] --> Erro, não pertence a cadeia de Aminoácido![/color]"
     text_example_dynamic_NeedlemanWunsch = "Exemplo de Matriz Dinâmica do Algoritmo Needleman-Wunsch"
     text_example_dynamic_SmithWaterman = "Exemplo de Matriz Dinâmica do Algoritmo Smith-Waterman"
+    text_run_align = 'Gerar Alinhamento'
+    text_match_value_scoring = 'Match Value Scoring:'
+    text_mismatch_value_scoring = 'Mismatch Value Scoring:'
+    text_gap_penalty_open = 'Gap Penalty (Open):'
+    text_gap_penalty_extend = 'Gap Penalty (Extend):'
+    text_message_erro = 'Error!'
+    text_default_align_pairwise = 'Classe (Biopython):'
+    text_substitution_matrices = 'M.S.'
+    text_substitution_matrices2 = 'Matriz de Substituição'
+    text_python = 'Py'
+    text_message_pairwise2 = 'O Módulo Bio.pairwise2 usa o algoritmo de Needleman-Wunsch modificado para a suíte de programas EMBOSS Needle (global) e EMBOSS Water (Local) (que também usa Smith-Waterman modificado)'
     # Tela do Menu do Algoritmos
     text_name_algoritmo_1 = "Algoritmo Needleman-Wunsch"
     text_name_algoritmo_2 = "Algoritmo Smith-Waterman"
     text_name_algoritmo_3 = "Algoritmo BLAST"
     text_name_algoritmo_4 = "Programação Dinâmica"
-    text_information_algoritmo_1 = 'Exemplo de alinhamento na programação dinâmica.'
-    text_information_algoritmo_2 = 'Exemplo de alinhamento global e par-a-par de duas sequências.'
-    text_information_algoritmo_3 = 'Exemplo de alinhamento local de duas sequências biológicas.'
-    text_information_algoritmo_4 = 'Exemplo de alinhamento global e Local de duas sequencias biológicas.'
+    text_information_algoritmo_1 = 'Alinhamento na programação dinâmica'
+    text_information_algoritmo_2 = 'Alinhamento global e par-a-par de duas sequências'
+    text_information_algoritmo_3 = 'Alinhamento local e par-a-par de duas sequências'
+    text_information_algoritmo_4 = 'Alinhamento global e Local de duas sequências biológicas'
     # DNA/RNA
-    text_nucleotideo_1 = 'Ademina'
+    text_nucleotideo_1 = 'Adenina'
     text_nucleotideo_2 = 'Citosina'
     text_nucleotideo_3 = 'Guanina'
     text_nucleotideo_4 = 'Timina'
@@ -151,9 +168,7 @@ elif language == 'PT-BR':
     text_amino_acids_20 = "Met = Metionina = Ácido 2-amino-3-metiltio-n-butírico"
     text_amino_acids_21 = "Stop"
     text_amino_acids_22 = "Qualquer Aminiácido"
-    text_spinner_dna = 'DNA'
-    text_spinner_rna = 'RNA'
-    text_spinner_amino_acids = 'Aminoácidos'
+    text_amino_acids = 'Aminoácidos'
     # Tela da Programação Dinâmica Aplicada a Alinhamentos de Sequências
     text_dynamicProgramming = '[color=#000000][size=22][b]Programação Dinâmica Aplicada a Alinhamentos de Sequências[/b][/size][/color]'
     text_sequence_example = 'x = TTCATA   |   y = TGCTCGTA'
@@ -309,13 +324,13 @@ class Screen_1(Screen):
     text_amino_acids_21 = text_amino_acids_21
     text_amino_acids_22 = text_amino_acids_22
     text_number_bases = text_number_bases
-    text_blast = text_blast
     text_dna_complement = text_dna_complement
     text_dna_reserve_complement = text_dna_reserve_complement
     text_rna = text_rna
     text_rna_protein = text_rna_protein
     text_save = text_save
     text_back = text_back
+    text_amino_acids = text_amino_acids
     text_message_save = text_message_save
     text_message_fasta = text_message_fasta
     text_title_popup = text_title_popup
@@ -475,7 +490,6 @@ class Screen_1(Screen):
                 elif n == 'X':
                     file.writelines(n + ' = ' + text_amino_acids_22)
 
-            # Fechando o Arquivo
             file.close()
 
             # Exibir o resultado na Tela
@@ -535,11 +549,16 @@ class Screen_1(Screen):
         x = 0  # Qualquer nucleotídeo
         e = 0  # Erro
 
+        # Remover Carecteres e Espaço vázios
+        seq = seq.replace('\\n', '')
+        pattern = re.compile(r'\s+')
+        seq = re.sub(pattern, '', seq)
+
         # Cabeçalho
         print()
         print(30*'=-=')
         print()
-        print('Aminoácidos:')
+        print(text_amino_acids)
         print()
 
         # Verificar os nucleotídeos digitados pertecem a cadeia de DNA
@@ -604,9 +623,9 @@ class Screen_1(Screen):
             rna_protein = str(dna.translate())
 
             # Exibir a contagem de Nucleotídeos
-            self.ids.result_id.text = text_dna_complement + ' ' + dna_complement + '\n\n' + text_dna_reserve_complement + ' ' + \
-                dna_reverse_complement + '\n\n' + text_rna + ' ' + rna + \
-                '\n\n' + text_rna_protein + ' ' + rna_protein
+            self.ids.result_id.text = text_dna_complement + ' ' + dna_complement.upper() + '\n\n' + text_dna_reserve_complement + ' ' + \
+                dna_reverse_complement.upper() + '\n\n' + text_rna + ' ' + rna.upper() + \
+                '\n\n' + text_rna_protein + ' ' + rna_protein.upper()
 
             # Exibir o Nome do Aminoácidos
             for n in rna_protein:
@@ -688,8 +707,6 @@ class Screen_1(Screen):
             text_number_bases + '[/b]: ' + \
             str(s) + ' |  [b]Error:[/b] ' + str(e)
 
-        print()
-        print(30*'=-=')
         print()
 
     def activate_graphic(self, name):
@@ -1482,7 +1499,7 @@ Classe resposável pela exibição do conteúdo referente a Programação Dinâm
 
 class Screen_2_2(Screen):
     '''
-    Classe responsável pelo algoritmos Needleman-Wunsch.
+    Classe resposável pelo exemplo do algoritmo Needleman-Wunsch em Biopython.
 
     '''
 
@@ -1490,49 +1507,207 @@ class Screen_2_2(Screen):
     text_title_NeedlemanWunsc = text_title_NeedlemanWunsc
     text_sequence_A = text_sequence_A
     text_sequence_B = text_sequence_B
-    text_no_nucleotideo_dna = text_no_nucleotideo_dna
-    text_no_nucleotideo_rna = text_no_nucleotideo_rna
-    text_no_amino_acids = text_no_amino_acids
+    text_run_align = text_run_align
+    text_match_value_scoring = text_match_value_scoring
+    text_mismatch_value_scoring = text_mismatch_value_scoring
+    text_gap_penalty_open = text_gap_penalty_open
+    text_gap_penalty_extend = text_gap_penalty_extend
+    text_message_erro = text_message_erro
+    text_python = text_python
+    text_default_align_pairwise = text_default_align_pairwise
+    text_message_pairwise2 = text_message_pairwise2
+    text_substitution_matrices = text_substitution_matrices
+
+    def __init__(self, **kwargs):
+        # Função Construtora
+        super(Screen_2_2, self).__init__(**kwargs)
+        self.ids.input_gap_penalty_extend.disabled = True
+
+    def button_reset_fields(self, value):
+        # Função para disativar TextInput dos campos de pontuações, somente na Bio.pairwise2
+
+        v = value
+
+        # Disable Campos
+        if v == 'pairwise2':
+            self.ids.input_match_value_scoring.text = '0'
+            self.ids.input_mismatch_value_scoring.text = '0'
+            self.ids.input_gap_penalty_open.text = '0'
+            self.ids.input_gap_penalty_extend.text = '0'
+            self.ids.input_gap_penalty_extend.disabled = False
+        elif v == 'PairwiseAligner':
+            self.ids.input_match_value_scoring.text = '0'
+            self.ids.input_mismatch_value_scoring.text = '0'
+            self.ids.input_gap_penalty_open.text = '0'
+            self.ids.input_gap_penalty_extend.text = '0'
+            self.ids.input_gap_penalty_extend.disabled = True
+
+    def button_run_alignment(self):
+        # Função para realizar alinhamento em PairwiseAligner e pairwise2
+        try:
+            # Capturar Valores do InputText
+            seq1 = self.ids.input_1.text
+            seq2 = self.ids.input_2.text
+
+            # Valores dos campos de pontuação
+            default_align_pairwise = self.ids.input_default_align_pairwise.text
+            match_value_scoring = self.ids.input_match_value_scoring.text
+            mismatch_value_scoring = self.ids.input_mismatch_value_scoring.text
+            gap_penalty_open = self.ids.input_gap_penalty_open.text
+            gap_penalty_extend = self.ids.input_gap_penalty_extend.text
+
+            # Remover Carecteres e Espaço vázios
+            seq1 = seq1.replace('\\n', '')
+            pattern = re.compile(r'\s+')
+            seq1 = re.sub(pattern, '', seq1)
+            seq2 = seq2.replace('\\n', '')
+            pattern = re.compile(r'\s+')
+            seq2 = re.sub(pattern, '', seq2)
+
+            seq1 = Seq(seq1)
+            seq2 = Seq(seq2)
+
+            # Valores dos campos de pontuações
+            M = float(match_value_scoring)
+            m = float(mismatch_value_scoring)
+            go = float(gap_penalty_open)
+            ge = float(gap_penalty_extend)
+
+            if default_align_pairwise == 'PairwiseAligner':
+
+                # Alinhamento com duas Sequências
+                if M == 0 and m == 0 and go == 0:
+
+                    aligner = Align.PairwiseAligner()
+
+                    # Salvar o resultado do alinhamento
+                    file = open('data/tmp/result_alignment.txt', 'w')
+                    file.write(str(aligner.algorithm) + '\n\n')
+                    file.write('Match Value Score: ' +
+                               str(aligner.match_score) + '\n')
+                    file.write('Mismatch Value Score: ' +
+                               str(aligner.mismatch_score) + '\n')
+                    file.write('Gap Value Score: ' +
+                               str(aligner.gap_score) + '\n\n')
+
+                    # Valor Score
+                    score = aligner.score(seq1, seq2)
+
+                    alignments = aligner.align(seq1, seq2)
+                    for alignment in alignments:
+                        file.write(str(alignment) + '\n')
+
+                    file.write('Score: ' + str(score) + '\n')
+                    file.close()
+
+                    # Exibir na Tela
+                    webbrowser.open('data/tmp/result_alignment.txt',
+                                    new=0, autoraise=True)
+
+                # Alinhamento de duas Sequências com pontuação de penalização
+                elif M != 0 or m != 0 or go != 0:
+
+                    aligner = Align.PairwiseAligner()
+
+                    # Valor Score
+                    aligner.match_score = M
+                    aligner.mismatch_score = m
+                    aligner.gap_score = go
+                    score = aligner.score(seq1, seq2)
+
+                    # Salvar o resultado do alinhamento
+                    file = open('data/tmp/result_alignment.txt', 'w')
+                    file.write(str(aligner.algorithm) + '\n\n')
+                    file.write('Match Value Score: ' +
+                               str(aligner.match_score) + '\n')
+                    file.write('Mismatch Value Score: ' +
+                               str(aligner.mismatch_score) + '\n')
+                    file.write('Gap Value Score: ' +
+                               str(aligner.gap_score) + '\n\n')
+
+                    # Valor Score
+                    score = aligner.score(seq1, seq2)
+
+                    alignments = aligner.align(seq1, seq2)
+                    for alignment in alignments:
+                        file.write(str(alignment) + '\n')
+
+                    file.write('Score: ' + str(score) + '\n')
+                    file.close()
+
+                    # Exibir na Tela
+                    webbrowser.open('data/tmp/result_alignment.txt',
+                                    new=0, autoraise=True)
+
+            elif default_align_pairwise == 'pairwise2':
+
+                # Verificar os campos de pontuação
+                if M == 0 and m == 0 and go == 0 and ge == 0:
+
+                    # Salvar o resultado do alinhamento
+                    file = open('data/tmp/result_alignment.txt', 'w')
+                    file.write(text_message_pairwise2 + '\n\n')
+
+                    # Alinhamento de duas sequência
+                    alignments = pairwise2.align.globalxx(seq1, seq2)
+                    for alignment in alignments:
+                        file.write(format_alignment(*alignment))
+                        file.write('\n')
+
+                    file.close()
+
+                    # Exibir na Tela
+                    webbrowser.open('data/tmp/result_alignment.txt',
+                                    new=0, autoraise=True)
+
+                elif M != 0 or m != 0 or go != 0:
+
+                    # Salvar o resultado do alinhamento
+                    file = open('data/tmp/result_alignment.txt', 'w')
+                    file.write(text_message_pairwise2 + '\n\n')
+
+                    # Alinhamento global Ponderado
+                    alignments = pairwise2.align.globalms(
+                        seq1, seq2, M, m, go, ge)
+                    for alignment in alignments:
+                        file.write(format_alignment(*alignment))
+                        file.write('\n')
+
+                    file.close()
+
+                    # Exibir na Tela
+                    webbrowser.open('data/tmp/result_alignment.txt',
+                                    new=0, autoraise=True)
+        except:
+            # Popup
+            layout = BoxLayout(orientation='vertical',
+                               spacing=20, padding=[20, 20, 20, 20])
+            label = Label(text=text_message_erro, halign='left', markup=True)
+            button_close = Button(text='OK', size_hint_y=None, height=48, background_color=(
+                1, 0, 0, 1), background_normal=(''), background_down=(''))
+            layout.add_widget(label)
+            layout.add_widget(button_close)
+            popup = Popup(title=text_title_popup, content=layout, size_hint=(None, None), size=(
+                100, 100), background='atlas://data/images/defaulttheme/button_pressed')
+            button_close.bind(on_press=popup.dismiss)
+            animation = Animation(
+                size=(300, 250), duration=0.3, t='out_back')
+            animation.start(popup)
+            popup.open()
+
+
+class Screen_2_2_1(Screen):
+    '''
+    Classe responsável pelo exemplo do algoritmo Needleman-Wunsch em Python.
+
+    '''
+
+    text_back = text_back
+    text_title_NeedlemanWunsc = text_title_NeedlemanWunsc
+    text_sequence_A = text_sequence_A
+    text_sequence_B = text_sequence_B
     text_example_dynamic_NeedlemanWunsch = text_example_dynamic_NeedlemanWunsch
-    text_nucleotideo_1 = text_nucleotideo_1  # DNA/RNA
-    text_nucleotideo_2 = text_nucleotideo_2
-    text_nucleotideo_3 = text_nucleotideo_3
-    text_nucleotideo_4 = text_nucleotideo_4
-    text_nucleotideo_5 = text_nucleotideo_5
-    text_nucleotideo_6 = text_nucleotideo_6
-    text_nucleotideo_7 = text_nucleotideo_7
-    text_nucleotideo_8 = text_nucleotideo_8
-    text_nucleotideo_9 = text_nucleotideo_9
-    text_nucleotideo_10 = text_nucleotideo_10
-    text_nucleotideo_11 = text_nucleotideo_11
-    text_nucleotideo_12 = text_nucleotideo_12
-    text_nucleotideo_13 = text_nucleotideo_13
-    text_nucleotideo_14 = text_nucleotideo_14
-    text_nucleotideo_15 = text_nucleotideo_15
-    text_nucleotideo_16 = text_nucleotideo_16
-    text_amino_acids_1 = text_amino_acids_1  # Aminoácidos
-    text_amino_acids_2 = text_amino_acids_2
-    text_amino_acids_3 = text_amino_acids_3
-    text_amino_acids_4 = text_amino_acids_4
-    text_amino_acids_5 = text_amino_acids_5
-    text_amino_acids_6 = text_amino_acids_6
-    text_amino_acids_7 = text_amino_acids_7
-    text_amino_acids_8 = text_amino_acids_8
-    text_amino_acids_9 = text_amino_acids_9
-    text_amino_acids_10 = text_amino_acids_10
-    text_amino_acids_11 = text_amino_acids_11
-    text_amino_acids_12 = text_amino_acids_12
-    text_amino_acids_13 = text_amino_acids_13
-    text_amino_acids_14 = text_amino_acids_14
-    text_amino_acids_15 = text_amino_acids_15
-    text_amino_acids_16 = text_amino_acids_16
-    text_amino_acids_17 = text_amino_acids_17
-    text_amino_acids_18 = text_amino_acids_18
-    text_amino_acids_19 = text_amino_acids_19
-    text_amino_acids_20 = text_amino_acids_20
-    text_spinner_dna = text_spinner_dna
-    text_spinner_rna = text_spinner_rna
-    text_spinner_amino_acids = text_spinner_amino_acids
+    text_message_erro = text_message_erro
 
     def maximum(c1, c2, up, side, diagonal):
         # A função “maximo" que pega os valores de “c1" e “c2" estão sendo avaliados e pontuam as células como: “lado”, “cima”,“diagonal”
@@ -1577,7 +1752,11 @@ class Screen_2_2(Screen):
                 ali_w = w[i] + ali_w
                 i -= 1
 
+        # Exibir na Tela e Console
         return {1: (punctuation[len(w)-1][len(v)-1]), 2: ali_v, 3: ali_w}
+        print(pontuacao[len(w)-1][len(v)-1])
+        print(ali_v)
+        print(ali_w)
 
     def printMatrix(v, w, punctuation, pointers):
         # A função imprime a matriz de programação dinâmica
@@ -1602,203 +1781,69 @@ class Screen_2_2(Screen):
         print()
 
     def lcs(self):
-        # A função lcs "Longest Common Subsequence"
-        seq_1 = self.ids.input_1.text
-        seq_2 = self.ids.input_2.text
+        try:
 
-        # Converter em maiscúlo
-        seq_1 = seq_1.swapcase()
-        seq_2 = seq_2.swapcase()
+            # A função lcs "Longest Common Subsequence"
+            seq_1 = self.ids.input_1.text
+            seq_2 = self.ids.input_2.text
 
-        # Começar uma Lista
-        v = ['*']
-        w = ['*']
+            # Converter em maiscúlo
+            seq_1 = seq_1.swapcase()
+            seq_2 = seq_2.swapcase()
 
-        # Adicionar de forma individual valor recebido Text Input
-        for i in seq_1:
-            v.append(i)
+            # Começar uma Lista
+            v = ['*']
+            w = ['*']
 
-        for i in seq_2:
-            w.append(i)
+            # Adicionar de forma individual valor recebido Text Input
+            for i in seq_1:
+                v.append(i)
 
-        # Ativar ou Desativar o TextInput
-        if len(v) < len(w):
-            self.ids.input_2.disabled = True
-        elif len(v) > len(w):
-            self.ids.input_2.disabled = False
+            for i in seq_2:
+                w.append(i)
 
-        # Variáveis
-        punctuation = []
-        pointers = []
-        punctuation = [0]*len(v)
-        pointers = ['']*len(v)
+            # Ativar ou Desativar o TextInput
+            if len(v) < len(w):
+                self.ids.input_2.disabled = True
+            elif len(v) > len(w):
+                self.ids.input_2.disabled = False
 
-        for i in range(0, len(w)):
-            punctuation[i] = [0]*len(v)
-            pointers[i] = ['']*len(v)
+            # Variáveis
+            punctuation = []
+            pointers = []
+            punctuation = [0]*len(v)
+            pointers = ['']*len(v)
 
-        for i in range(0, len(w)):
-            pointers[i][0] = '|'
+            for i in range(0, len(w)):
+                punctuation[i] = [0]*len(v)
+                pointers[i] = ['']*len(v)
 
-        for j in range(0, len(v)):
-            pointers[0][j] = '_'
+            for i in range(0, len(w)):
+                pointers[i][0] = '|'
 
-        for i in range(1, len(w)):
-            for j in range(1, len(v)):
-                punctuation[i][j] = Screen_2_2.maximum(
-                    v[j], w[i], punctuation[i-1][j], punctuation[i][j-1], punctuation[i-1][j-1])
-                pointers[i][j] = Screen_2_2.pointer(
-                    v[j], w[i], punctuation[i-1][j], punctuation[i][j-1], punctuation[i-1][j-1])
+            for j in range(0, len(v)):
+                pointers[0][j] = '_'
 
-        # Enviando para as funações citadas
-        Screen_2_2.printMatrix(v, w, punctuation, pointers)
-        result = (Screen_2_2.generateAlignment(v, w, punctuation, pointers))
+            for i in range(1, len(w)):
+                for j in range(1, len(v)):
+                    punctuation[i][j] = Screen_2_2_1.maximum(
+                        v[j], w[i], punctuation[i-1][j], punctuation[i][j-1], punctuation[i-1][j-1])
+                    pointers[i][j] = Screen_2_2_1.pointer(
+                        v[j], w[i], punctuation[i-1][j], punctuation[i][j-1], punctuation[i-1][j-1])
 
-        # Enviar resultado para Tela do Aplicativo
-        self.ids.result_1.text = str(result[1])
-        self.ids.result_2.text = str(result[2] + '\n' + result[3])
+            # Enviando para as funações citadas
+            Screen_2_2_1.printMatrix(v, w, punctuation, pointers)
+            result = (Screen_2_2_1.generateAlignment(
+                v, w, punctuation, pointers))
 
-    def keyboard_textInput(self):
-        seq = self.ids.input_1.text
+            # Enviar resultado para Tela do Aplicativo
+            self.ids.result_1.text = str(result[2] + '\n' + result[3])
 
-        # Adicionar de forma individual valor recebido Text Input
-        for i in seq:
-            Screen_2_2.check(self, i)
-
-    def keyboard_textInput2(self):
-        seq = self.ids.input_2.text
-
-        # Adicionar de forma individual valor recebido Text Input
-        for i in seq:
-            Screen_2_2.check(self, i)
-
-    def check(self, value):
-        # A função "check" pega valores e checa se o caracter é um nuleotídeo ou aminoácido.
-
-        n = value.swapcase()
-
-        # Pegar valor do Spiner quer altera DNA, RNA ou Aminoácidos
-        var_spiner = self.ids.spinner_id.text
-
-        # Verificar qual cadeia deve ser inserida
-        if var_spiner == text_spinner_dna:
-            # DNA
-            if n == 'A' or n == 'a':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_1
-            elif n == 'C' or n == 'c':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_2
-            elif n == 'G' or n == 'g':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_3
-            elif n == 'T' or n == 't':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_4
-            elif n == 'R' or n == 'r':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_6
-            elif n == 'Y' or n == 'y':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_7
-            elif n == 'M' or n == 'm':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_8
-            elif n == 'K' or n == 'k':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_9
-            elif n == 'W' or n == 'w':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_10
-            elif n == 'S' or n == 's':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_11
-            elif n == 'B' or n == 'b':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_12
-            elif n == 'D' or n == 'd':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_13
-            elif n == 'H' or n == 'h':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_14
-            elif n == 'V' or n == 'v':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_15
-            elif n == 'N' or n == 'n':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_16
-            else:
-                self.ids.no_nucleotideo.text = '[color=#ff0000]' + \
-                    n + '[/color]' + ' = ' + text_no_nucleotideo_dna
-
-        elif var_spiner == text_spinner_rna:
-            # RNA
-            if n == 'A' or n == 'a':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_1
-            elif n == 'C' or n == 'c':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_2
-            elif n == 'G' or n == 'g':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_3
-            elif n == 'U' or n == 'u':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_5
-            elif n == 'R' or n == 'r':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_6
-            elif n == 'Y' or n == 'y':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_7
-            elif n == 'M' or n == 'm':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_8
-            elif n == 'K' or n == 'k':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_9
-            elif n == 'W' or n == 'w':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_10
-            elif n == 'S' or n == 's':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_11
-            elif n == 'B' or n == 'b':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_12
-            elif n == 'D' or n == 'd':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_13
-            elif n == 'H' or n == 'h':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_14
-            elif n == 'N' or n == 'n':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_16
-            else:
-                self.ids.no_nucleotideo.text = '[color=#ff0000]' + \
-                    n + '[/color]' + ' = ' + text_no_nucleotideo_rna
-
-        elif var_spiner == text_spinner_amino_acids:
-            # Aminoácidos
-            if n == 'G' or n == 'g':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_1
-            elif n == 'A' or n == 'a':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_2
-            elif n == 'L' or n == 'l':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_3
-            elif n == 'V' or n == 'v':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_4
-            elif n == 'I' or n == 'i':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_5
-            elif n == 'P' or n == 'p':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_6
-            elif n == 'F' or n == 'f':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_7
-            elif n == 'S' or n == 's':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_8
-            elif n == 'T' or n == 't':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_9
-            elif n == 'C' or n == 'c':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_10
-            elif n == 'Y' or n == 'y':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_11
-            elif n == 'N' or n == 'n':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_12
-            elif n == 'Q' or n == 'q':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_13
-            elif n == 'D' or n == 'd':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_14
-            elif n == 'E' or n == 'e':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_15
-            elif n == 'R' or n == 'r':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_16
-            elif n == 'K' or n == 'k':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_17
-            elif n == 'H' or n == 'h':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_18
-            elif n == 'W' or n == 'w':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_19
-            elif n == 'M' or n == 'm':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_20
-            else:
-                self.ids.no_nucleotideo.text = '[color=#ff0000]' + \
-                    n + '[/color]' + ' = ' + text_no_amino_acids
+        except:
+            print(text_message_erro)
 
 
-class Screen_2_2_1(Screen):
+class Screen_2_2_2(Screen):
     '''
     Classe responsável em mostrar código em python do Algoritmo do Needleman-Wunsch
 
@@ -1806,16 +1851,148 @@ class Screen_2_2_1(Screen):
 
     text_back = text_back
 
-    # Abir  o código de examplo do código em BioPython na execução do BLAST
+    # Abir texto
     text = ''
     with open('data/content/example_needleman_wunsch.txt') as code:
         for line in code:
             text += line
 
 
+class Screen_2_2_3(Screen):
+
+    '''
+    Classe resposável pelo exemplo do algoritmo Needleman-Wunsch em Biopython.
+
+    '''
+
+    text_back = text_back
+    text_title_NeedlemanWunsc = text_title_NeedlemanWunsc
+    text_sequence_A = text_sequence_A
+    text_sequence_B = text_sequence_B
+    text_run_align = text_run_align
+    text_default_align_pairwise = text_default_align_pairwise
+    text_gap_penalty_open = text_gap_penalty_open
+    text_gap_penalty_extend = text_gap_penalty_extend
+    text_message_erro = text_message_erro
+    text_substitution_matrices = text_substitution_matrices
+    text_substitution_matrices2 = text_substitution_matrices2
+    substitution_matrices = substitution_matrices
+
+    def __init__(self, **kwargs):
+        # Função Construtora
+        super(Screen_2_2_3, self).__init__(**kwargs)
+        self.ids.input_gap_penalty_open.disabled = True
+        self.ids.input_gap_penalty_extend.disabled = True
+
+    def button_reset_fields(self, value):
+        # Função para disativar TextInput dos campos de pontuações, somente na Bio.pairwise2
+
+        v = value
+
+        # Disable Campos
+        if v == 'pairwise2':
+            self.ids.input_gap_penalty_open.text = '0'
+            self.ids.input_gap_penalty_extend.text = '0'
+            self.ids.input_gap_penalty_extend.disabled = False
+            self.ids.input_gap_penalty_open.disabled = False
+        elif v == 'PairwiseAligner':
+            self.ids.input_gap_penalty_open.text = '0'
+            self.ids.input_gap_penalty_extend.text = '0'
+            self.ids.input_gap_penalty_extend.disabled = True
+            self.ids.input_gap_penalty_open.disabled = True
+
+    def button_run_alignment(self):
+        # Função para realizar PairwiseAligner e pairwise2 usando Matrizes de Substituição
+
+        try:
+            # Capturar Valores do InputText
+            seq1 = self.ids.input_1.text
+            seq2 = self.ids.input_2.text
+
+            # Valores dos campos de pontuação
+            default_align_pairwise = self.ids.input_default_align_pairwise.text
+            gap_penalty_open = self.ids.input_gap_penalty_open.text
+            gap_penalty_extend = self.ids.input_gap_penalty_extend.text
+
+            # Remover Carecteres e Espaço vázios
+            seq1 = seq1.replace('\\n', '')
+            pattern = re.compile(r'\s+')
+            seq1 = re.sub(pattern, '', seq1)
+            seq2 = seq2.replace('\\n', '')
+            pattern = re.compile(r'\s+')
+            seq2 = re.sub(pattern, '', seq2)
+
+            # Maiúsculo
+            seq1 = seq1.upper()
+            seq2 = seq2.upper()
+            seq1 = Seq(seq1)
+            seq2 = Seq(seq2)
+
+            # Valores dos campos de pontuações
+            go = float(gap_penalty_open)
+            ge = float(gap_penalty_extend)
+
+            if default_align_pairwise == 'PairwiseAligner':
+
+                aligner = Align.PairwiseAligner()
+
+                # Salvar o resultado do alinhamento
+                file = open('data/tmp/result_alignment.txt', 'w')
+                file.write(str(substitution_matrices) + '\n\n')
+
+                # Valor Score
+                score = aligner.score(seq1, seq2)
+
+                # Alinhamento global com Matrizes de Substituição
+                aligner.substitution_matrix = substitution_matrices
+                alignments = aligner.align(seq1, seq2)
+                for alignment in alignments:
+                        file.write(str(alignment) + '\n')
+
+                file.write('Score: ' + str(score) + '\n')
+                file.close() 
+
+                webbrowser.open('data/tmp/result_alignment.txt',
+                                new=0, autoraise=True)
+
+            elif default_align_pairwise == 'pairwise2':
+
+                # Salvar o resultado do alinhamento
+                file = open('data/tmp/result_alignment.txt', 'w')
+                file.write(text_message_pairwise2 + '\n\n')
+
+                # Alinhamento global com uso de Matriz de Subustituição
+                alignments = pairwise2.align.globalds(seq1, seq2, substitution_matrices, go, ge)
+                for alignment in alignments:
+                    file.write(format_alignment(*alignment))
+                    file.write('\n')
+
+                file.close()
+
+                webbrowser.open('data/tmp/result_alignment.txt',
+                                new=0, autoraise=True)
+
+        except:
+            # Popup
+            layout = BoxLayout(orientation='vertical',
+                               spacing=20, padding=[20, 20, 20, 20])
+            label = Label(text=text_message_erro, halign='left', markup=True)
+            button_close = Button(text='OK', size_hint_y=None, height=48, background_color=(
+                1, 0, 0, 1), background_normal=(''), background_down=(''))
+            layout.add_widget(label)
+            layout.add_widget(button_close)
+            popup = Popup(title=text_title_popup, content=layout, size_hint=(None, None), size=(
+                100, 100), background='atlas://data/images/defaulttheme/button_pressed')
+            button_close.bind(on_press=popup.dismiss)
+            animation = Animation(
+                size=(300, 250), duration=0.3, t='out_back')
+            animation.start(popup)
+            popup.open()
+
+
 class Screen_2_3(Screen):
     '''
-    Classe responsável pelo algoritmos Smith-Waterman.
+    Classe resposável pelo exemplo do algoritmo Needleman-Wunsch em Biopython.
 
     '''
 
@@ -1823,327 +2000,201 @@ class Screen_2_3(Screen):
     text_title_SmithWaterman = text_title_SmithWaterman
     text_sequence_A = text_sequence_A
     text_sequence_B = text_sequence_B
-    text_no_nucleotideo_dna = text_no_nucleotideo_dna
-    text_no_nucleotideo_rna = text_no_nucleotideo_rna
-    text_no_amino_acids = text_no_amino_acids
-    text_example_dynamic_SmithWaterman = text_example_dynamic_SmithWaterman
-    text_nucleotideo_1 = text_nucleotideo_1  # DNA/RNA
-    text_nucleotideo_2 = text_nucleotideo_2
-    text_nucleotideo_3 = text_nucleotideo_3
-    text_nucleotideo_4 = text_nucleotideo_4
-    text_nucleotideo_5 = text_nucleotideo_5
-    text_nucleotideo_6 = text_nucleotideo_6
-    text_nucleotideo_7 = text_nucleotideo_7
-    text_nucleotideo_8 = text_nucleotideo_8
-    text_nucleotideo_9 = text_nucleotideo_9
-    text_nucleotideo_10 = text_nucleotideo_10
-    text_nucleotideo_11 = text_nucleotideo_11
-    text_nucleotideo_12 = text_nucleotideo_12
-    text_nucleotideo_13 = text_nucleotideo_13
-    text_nucleotideo_14 = text_nucleotideo_14
-    text_nucleotideo_15 = text_nucleotideo_15
-    text_nucleotideo_16 = text_nucleotideo_16
-    text_amino_acids_1 = text_amino_acids_1  # Aminoácidos
-    text_amino_acids_2 = text_amino_acids_2
-    text_amino_acids_3 = text_amino_acids_3
-    text_amino_acids_4 = text_amino_acids_4
-    text_amino_acids_5 = text_amino_acids_5
-    text_amino_acids_6 = text_amino_acids_6
-    text_amino_acids_7 = text_amino_acids_7
-    text_amino_acids_8 = text_amino_acids_8
-    text_amino_acids_9 = text_amino_acids_9
-    text_amino_acids_10 = text_amino_acids_10
-    text_amino_acids_11 = text_amino_acids_11
-    text_amino_acids_12 = text_amino_acids_12
-    text_amino_acids_13 = text_amino_acids_13
-    text_amino_acids_14 = text_amino_acids_14
-    text_amino_acids_15 = text_amino_acids_15
-    text_amino_acids_16 = text_amino_acids_16
-    text_amino_acids_17 = text_amino_acids_17
-    text_amino_acids_18 = text_amino_acids_18
-    text_amino_acids_19 = text_amino_acids_19
-    text_amino_acids_20 = text_amino_acids_20
-    text_spinner_dna = text_spinner_dna
-    text_spinner_rna = text_spinner_rna
-    text_spinner_amino_acids = text_spinner_amino_acids
+    text_run_align = text_run_align
+    text_match_value_scoring = text_match_value_scoring
+    text_mismatch_value_scoring = text_mismatch_value_scoring
+    text_gap_penalty_open = text_gap_penalty_open
+    text_gap_penalty_extend = text_gap_penalty_extend
+    text_message_erro = text_message_erro
+    text_default_align_pairwise = text_default_align_pairwise
 
-    def maximum(c1, c2, up, side, diagonal):
-        # A função “maximo" que pega os valores de “c1" e “c2" estão sendo avaliados e pontuam as células como: “lado”, “cima”,“diagonal”
-        if (c1 == c2 and (diagonal+1) >= up and (diagonal+1) >= side):
-            diagonal = diagonal+1
-            return diagonal
-        elif (side >= up and side >= diagonal):
-            return side
-        else:
-            return up
+    def __init__(self, **kwargs):
+        # Função Construtora
+        super(Screen_2_3, self).__init__(**kwargs)
+        self.ids.input_gap_penalty_extend.disabled = True
 
-    def pointer(c1, c2, up, side, diagonal):
-        # A função “ponteiro” é praticamente idêntica à função “maximo” com o diferencial de retornar símbolos “|”, “_” e “\”.
-        if (c1 == c2 and (diagonal+1) >= up and (diagonal+1) >= side):
-            return '\\'
-        elif (side >= up and side >= diagonal):
-            return '_'
-        else:
-            return '|'
+    def button_reset_fields(self, value):
+        # Função para disativar TextInput dos campos de pontuações, somente na Bio.pairwise2
 
-    def generateAlignment(v, w, punctuation, pointers):
-        # A função gera a matriz de programação dinâmica
-        ali_v = ''
-        ali_w = ''
+        v = value
 
-        i = len(w)-1
-        j = len(v)-1
+        # Disable Campos
+        if v == 'pairwise2':
+            self.ids.input_match_value_scoring.text = '0'
+            self.ids.input_mismatch_value_scoring.text = '0'
+            self.ids.input_gap_penalty_open.text = '0'
+            self.ids.input_gap_penalty_extend.text = '0'
+            self.ids.input_gap_penalty_extend.disabled = False
+        elif v == 'PairwiseAligner':
+            self.ids.input_match_value_scoring.text = '0'
+            self.ids.input_mismatch_value_scoring.text = '0'
+            self.ids.input_gap_penalty_open.text = '0'
+            self.ids.input_gap_penalty_extend.text = '0'
+            self.ids.input_gap_penalty_extend.disabled = True
 
-        while ((i != 0) or (j != 0)):
-            if (pointers[i][j] == '\\'):
-                ali_v = v[j] + ali_v
-                ali_w = w[i] + ali_w
-                i -= 1
-                j -= 1
-            elif (pointers[i][j] == '_'):
-                ali_v = v[j] + ali_v
-                ali_w = '_' + ali_w
-                j -= 1
+    def button_run_alignment(self):
+        # Função para realizar alinhamento em PairwiseAligner e pairwise2
+        try:
+            # Capturar Valores do InputText
+            seq1 = self.ids.input_1.text
+            seq2 = self.ids.input_2.text
 
-            else:
-                ali_v = '_' + ali_v
-                ali_w = w[i] + ali_w
-                i -= 1
+            # Valores dos campos de pontuação
+            default_align_pairwise = self.ids.input_default_align_pairwise.text
+            match_value_scoring = self.ids.input_match_value_scoring.text
+            mismatch_value_scoring = self.ids.input_mismatch_value_scoring.text
+            gap_penalty_open = self.ids.input_gap_penalty_open.text
+            gap_penalty_extend = self.ids.input_gap_penalty_extend.text
 
-        return {1: (punctuation[len(w)-1][len(v)-1]), 2: ali_v, 3: ali_w}
+            # Remover Carecteres e Espaço vázios
+            seq1 = seq1.replace('\\n', '')
+            pattern = re.compile(r'\s+')
+            seq1 = re.sub(pattern, '', seq1)
+            seq2 = seq2.replace('\\n', '')
+            pattern = re.compile(r'\s+')
+            seq2 = re.sub(pattern, '', seq2)
 
-    def printMatrix(v, w, punctuation, pointers):
-        # A função imprime a matriz de programação dinâmica
-        print()
-        print(30*'=-=')
-        print()
-        print(text_example_dynamic_SmithWaterman)
-        print()
-        print('\t', end='')
+            seq1 = Seq(seq1)
+            seq2 = Seq(seq2)
 
-        for j in range(0, len(v)):
-            print(v[j], end='\t')
+            # Valores dos campos de pontuações
+            M = float(match_value_scoring)
+            m = float(mismatch_value_scoring)
+            go = float(gap_penalty_open)
+            ge = float(gap_penalty_extend)
 
-        print()
+            if default_align_pairwise == 'PairwiseAligner':
 
-        for i in range(0, len(w)):
-            print(w[i], end='\t')
-            for j in range(0, len(v)):
-                print(punctuation[i][j], pointers[i][j], end='\t', sep='')
-            print()
+                # Alinhamento com duas Sequências
+                if M == 0 and m == 0 and go == 0:
 
-        print()
+                    aligner = Align.PairwiseAligner()
+                    aligner.mode = 'local'
 
-    def matrixPointer_BLOSUM(self):
-        #
-        pass
+                    # Salvar o resultado do alinhamento
+                    file = open('data/tmp/result_alignment.txt', 'w')
+                    file.write(str(aligner.algorithm) + '\n\n')
+                    file.write('Match Value Score: ' +
+                               str(aligner.match_score) + '\n')
+                    file.write('Mismatch Value Score: ' +
+                               str(aligner.mismatch_score) + '\n')
+                    file.write('Gap Value Score: ' +
+                               str(aligner.gap_score) + '\n\n')
 
-    def lcs(self):
-        # A função lcs "Longest Common Subsequence"
-        seq_1 = self.ids.input_1.text
-        seq_2 = self.ids.input_2.text
+                    # Valor Score
+                    score = aligner.score(seq1, seq2)
 
-        # Converter em maiscúlo
-        seq_1 = seq_1.swapcase()
-        seq_2 = seq_2.swapcase()
+                    alignments = aligner.align(seq1, seq2)
+                    for alignment in alignments:
+                        file.write(str(alignment) + '\n')
 
-        # Começar uma Lista
-        v = ['*']
-        w = ['*']
+                    file.write('Score: ' + str(score) + '\n')
+                    file.close()
 
-        # Adicionar de forma individual valor recebido Text Input
-        for i in seq_1:
-            v.append(i)
+                    webbrowser.open('data/tmp/result_alignment.txt',
+                                    new=0, autoraise=True)
 
-        for i in seq_2:
-            w.append(i)
+                # Alinhamento de duas Sequências com pontuação de penalização
+                elif M != 0 or m != 0 or go != 0:
 
-        # Ativar ou Desativar o TextInput
-        if len(v) < len(w):
-            self.ids.input_2.disabled = True
-        elif len(v) > len(w):
-            self.ids.input_2.disabled = False
+                    aligner = Align.PairwiseAligner()
+                    aligner.mode = 'local'
 
-        # Variáveis
-        punctuation = []
-        pointers = []
-        punctuation = [0]*len(v)
-        pointers = ['']*len(v)
+                    # Valor Score
+                    aligner.match_score = M
+                    aligner.mismatch_score = m
+                    aligner.gap_score = go
+                    score = aligner.score(seq1, seq2)
 
-        for i in range(0, len(w)):
-            punctuation[i] = [0]*len(v)
-            pointers[i] = ['']*len(v)
+                    # Salvar o resultado do alinhamento
+                    file = open('data/tmp/result_alignment.txt', 'w')
+                    file.write(str(aligner.algorithm) + '\n\n')
+                    file.write('Match Value Score: ' +
+                               str(aligner.match_score) + '\n')
+                    file.write('Mismatch Value Score: ' +
+                               str(aligner.mismatch_score) + '\n')
+                    file.write('Gap Value Score: ' +
+                               str(aligner.gap_score) + '\n\n')
 
-        for i in range(0, len(w)):
-            pointers[i][0] = '|'
+                    # Valor Score
+                    score = aligner.score(seq1, seq2)
 
-        for j in range(0, len(v)):
-            pointers[0][j] = '_'
+                    alignments = aligner.align(seq1, seq2)
+                    for alignment in alignments:
+                        file.write(str(alignment) + '\n')
 
-        for i in range(1, len(w)):
-            for j in range(1, len(v)):
-                punctuation[i][j] = Screen_2_3.maximum(
-                    v[j], w[i], punctuation[i-1][j], punctuation[i][j-1], punctuation[i-1][j-1])
-                pointers[i][j] = Screen_2_3.pointer(
-                    v[j], w[i], punctuation[i-1][j], punctuation[i][j-1], punctuation[i-1][j-1])
+                    file.write('Score: ' + str(score) + '\n')
+                    file.close()
 
-        # Enviando para as funações citadas
-        Screen_2_3.printMatrix(v, w, punctuation, pointers)
-        result = (Screen_2_3.generateAlignment(v, w, punctuation, pointers))
+                    webbrowser.open('data/tmp/result_alignment.txt',
+                                    new=0, autoraise=True)
 
-        # Enviar resultado para Tela do Aplicativo
-        self.ids.result_1.text = str(result[1])
-        self.ids.result_2.text = str(result[2] + '\n' + result[3])
+            elif default_align_pairwise == 'pairwise2':
 
-    def keyboard_textInput(self):
-        seq = self.ids.input_1.text
+                # Verificar os campos de pontuação
+                if M == 0 and m == 0 and go == 0 and ge == 0:
 
-        # Adicionar de forma individual valor recebido Text Input
-        for i in seq:
-            Screen_2_3.check(self, i)
+                    # Salvar o resultado do alinhamento
+                    file = open('data/tmp/result_alignment.txt', 'w')
+                    file.write(text_message_pairwise2 + '\n\n')
 
-    def keyboard_textInput2(self):
-        seq = self.ids.input_2.text
+                    # Alinhamento de duas sequência
+                    alignments = pairwise2.align.localxx(seq1, seq2)
+                    for alignment in alignments:
+                        file.write(format_alignment(*alignment))
+                        file.write('\n')
 
-        # Adicionar de forma individual valor recebido Text Input
-        for i in seq:
-            Screen_2_3.check(self, i)
+                    file.close()
 
-    def check(self, value):
-        # A função "check" pega valores e checa se o caracter é um nuleotídeo ou aminoácido.
+                    # Exibir na Tela
+                    webbrowser.open('data/tmp/result_alignment.txt',
+                                    new=0, autoraise=True)
 
-        n = value.swapcase()
+                elif M != 0 or m != 0 or go != 0:
 
-        # Pegar valor do Spiner quer altera DNA, RNA ou Aminoácidos
-        var_spiner = self.ids.spinner_id.text
+                    # Salvar o resultado do alinhamento
+                    file = open('data/tmp/result_alignment.txt', 'w')
+                    file.write(text_message_pairwise2 + '\n\n')
 
-        # Verificar qual cadeia deve ser inserida
-        if var_spiner == text_spinner_dna:
-            # DNA
-            if n == 'A' or n == 'a':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_1
-            elif n == 'C' or n == 'c':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_2
-            elif n == 'G' or n == 'g':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_3
-            elif n == 'T' or n == 't':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_4
-            elif n == 'R' or n == 'r':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_6
-            elif n == 'Y' or n == 'y':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_7
-            elif n == 'M' or n == 'm':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_8
-            elif n == 'K' or n == 'k':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_9
-            elif n == 'W' or n == 'w':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_10
-            elif n == 'S' or n == 's':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_11
-            elif n == 'B' or n == 'b':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_12
-            elif n == 'D' or n == 'd':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_13
-            elif n == 'H' or n == 'h':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_14
-            elif n == 'V' or n == 'v':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_15
-            elif n == 'N' or n == 'n':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_16
-            else:
-                self.ids.no_nucleotideo.text = '[color=#ff0000]' + \
-                    n + '[/color]' + ' = ' + text_no_nucleotideo_dna
+                    # Alinhamento global Ponderado
+                    alignments = pairwise2.align.localms(
+                        seq1, seq2, M, m, go, ge)
+                    for alignment in alignments:
+                        file.write(format_alignment(*alignment))
+                        file.write('\n')
 
-        elif var_spiner == text_spinner_rna:
-            # RNA
-            if n == 'A' or n == 'a':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_1
-            elif n == 'C' or n == 'c':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_2
-            elif n == 'G' or n == 'g':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_3
-            elif n == 'U' or n == 'u':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_5
-            elif n == 'R' or n == 'r':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_6
-            elif n == 'Y' or n == 'y':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_7
-            elif n == 'M' or n == 'm':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_8
-            elif n == 'K' or n == 'k':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_9
-            elif n == 'W' or n == 'w':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_10
-            elif n == 'S' or n == 's':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_11
-            elif n == 'B' or n == 'b':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_12
-            elif n == 'D' or n == 'd':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_13
-            elif n == 'H' or n == 'h':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_14
-            elif n == 'N' or n == 'n':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_nucleotideo_16
-            else:
-                self.ids.no_nucleotideo.text = '[color=#ff0000]' + \
-                    n + '[/color]' + ' = ' + text_no_nucleotideo_rna
+                    file.close()
 
-        elif var_spiner == text_spinner_amino_acids:
-            # Aminoácidos
-            if n == 'G' or n == 'g':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_1
-            elif n == 'A' or n == 'a':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_2
-            elif n == 'L' or n == 'l':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_3
-            elif n == 'V' or n == 'v':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_4
-            elif n == 'I' or n == 'i':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_5
-            elif n == 'P' or n == 'p':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_6
-            elif n == 'F' or n == 'f':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_7
-            elif n == 'S' or n == 's':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_8
-            elif n == 'T' or n == 't':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_9
-            elif n == 'C' or n == 'c':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_10
-            elif n == 'Y' or n == 'y':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_11
-            elif n == 'N' or n == 'n':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_12
-            elif n == 'Q' or n == 'q':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_13
-            elif n == 'D' or n == 'd':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_14
-            elif n == 'E' or n == 'e':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_15
-            elif n == 'R' or n == 'r':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_16
-            elif n == 'K' or n == 'k':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_17
-            elif n == 'H' or n == 'h':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_18
-            elif n == 'W' or n == 'w':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_19
-            elif n == 'M' or n == 'm':
-                self.ids.no_nucleotideo.text = n + ' = ' + text_amino_acids_20
-            else:
-                self.ids.no_nucleotideo.text = '[color=#ff0000]' + \
-                    n + '[/color]' + ' = ' + text_no_amino_acids
+                    webbrowser.open('data/tmp/result_alignment.txt',
+                                    new=0, autoraise=True)
+
+        except:
+            # Popup
+            layout = BoxLayout(orientation='vertical',
+                               spacing=20, padding=[20, 20, 20, 20])
+            label = Label(text=text_message_erro, halign='left', markup=True)
+            button_close = Button(text='OK', size_hint_y=None, height=48, background_color=(
+                1, 0, 0, 1), background_normal=(''), background_down=(''))
+            layout.add_widget(label)
+            layout.add_widget(button_close)
+            popup = Popup(title=text_title_popup, content=layout, size_hint=(None, None), size=(
+                100, 100), background='atlas://data/images/defaulttheme/button_pressed')
+            button_close.bind(on_press=popup.dismiss)
+            animation = Animation(
+                size=(300, 250), duration=0.3, t='out_back')
+            animation.start(popup)
+            popup.open()
 
 
 class Screen_2_3_1(Screen):
     '''
-Classe resposável pela exibição do código do Smith-Waterman em BioPython
+    Classe resposável pela exibição do códigos referente Smith-Waterman
 
-'''
+    '''
 
     text_back = text_back
 
-    # Abir  o código de examplo do código do algoritmo Smith-Waterman
+    # Abir texto
     text = ''
     with open('data/content/example_smith_waterman.txt') as code:
         for line in code:
@@ -2202,7 +2253,7 @@ class Screen_2_4(Screen):
                 file.writelines(stdout)
                 file.writelines(stderr)
                 file.close()
-                # Exibir o resultado na Tela
+
                 webbrowser.open('data/tmp/Result_BLASTN.fasta',
                                 new=0, autoraise=True)
             elif 'BLASTp' == var_spiner:
@@ -2216,7 +2267,7 @@ class Screen_2_4(Screen):
                 file.writelines(stdout)
                 file.writelines(stderr)
                 file.close()
-                # Exibir o resultado na Tela
+
                 webbrowser.open('data/tmp/Result_BLASTN.fasta',
                                 new=0, autoraise=True)
             elif 'BLASTx' == var_spiner:
@@ -2230,7 +2281,7 @@ class Screen_2_4(Screen):
                 file.writelines(stdout)
                 file.writelines(stderr)
                 file.close()
-                # Exibir o resultado na Tela
+
                 webbrowser.open('data/tmp/Result_BLASTN.fasta',
                                 new=0, autoraise=True)
             elif 'tBLASTn' == var_spiner:
@@ -2244,7 +2295,7 @@ class Screen_2_4(Screen):
                 file.writelines(stdout)
                 file.writelines(stderr)
                 file.close()
-                # Exibir o resultado na Tela
+
                 webbrowser.open('data/tmp/Result_BLASTN.fasta',
                                 new=0, autoraise=True)
             elif 'tBLASTx' == var_spiner:
@@ -2258,7 +2309,7 @@ class Screen_2_4(Screen):
                 file.writelines(stdout)
                 file.writelines(stderr)
                 file.close()
-                # Exibir o resultado na Tela
+
                 webbrowser.open('data/tmp/Result_BLASTN.fasta',
                                 new=0, autoraise=True)
         except:
@@ -2287,7 +2338,7 @@ class Screen_2_4_1(Screen):
 
     text_back = text_back
 
-    # Abir  o código de examplo do código em BioPython na execução do BLAST
+    # Abir texto
     text = ''
     with open('data/content/example_code_blast.txt') as code:
         for line in code:
@@ -2305,7 +2356,7 @@ class Screen_3(Screen):
     '''
     text_back = text_back
 
-    # Abir o texto
+    # Abir texto
     text = ''
     with open('data/content/text_vacabulary.txt') as code:
         for line in code:
@@ -2323,6 +2374,8 @@ screen_manager.add_widget(Screen_2_1(name="screen_2_1"))
 screen_manager.add_widget(Screen_2_1_1(name="screen_2_1_1"))
 screen_manager.add_widget(Screen_2_2(name="screen_2_2"))
 screen_manager.add_widget(Screen_2_2_1(name="screen_2_2_1"))
+screen_manager.add_widget(Screen_2_2_2(name="screen_2_2_2"))
+screen_manager.add_widget(Screen_2_2_3(name="screen_2_2_3"))
 screen_manager.add_widget(Screen_2_3(name="screen_2_3"))
 screen_manager.add_widget(Screen_2_3_1(name="screen_2_3_1"))
 screen_manager.add_widget(Screen_2_4(name="screen_2_4"))

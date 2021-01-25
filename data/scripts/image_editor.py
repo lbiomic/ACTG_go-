@@ -11,7 +11,6 @@ Módulo referente a carregamento de informações da Imagem
 
 from os import path
 from PIL import Image, ImageEnhance
-import cv2
 
 # Classe responsável gerenciar Editor de Imagem
 class image_editor():

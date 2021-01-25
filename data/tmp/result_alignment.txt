@@ -1,0 +1,47 @@
+Needleman-Wunsch
+
+Match Value Score: 1.0
+Mismatch Value Score: 0.0
+Gap Value Score: 0.0
+
+agtcg-tgcaca-
+|||||-||-|-|-
+agtcggtg-a-ac
+
+agtc-gtgcaca-
+||||-|||-|-|-
+agtcggtg-a-ac
+
+agtcg-tgca-ca
+|||||-||-|-|-
+agtcggtg-aac-
+
+agtc-gtgca-ca
+||||-|||-|-|-
+agtcggtg-aac-
+
+agtcg-tgc-aca
+|||||-||--||-
+agtcggtg-aac-
+
+agtc-gtgc-aca
+||||-|||--||-
+agtcggtg-aac-
+
+agtcg-tg-caca
+|||||-||--||-
+agtcggtga-ac-
+
+agtc-gtg-caca
+||||-|||--||-
+agtcggtga-ac-
+
+agtcg-tgcaca
+|||||-||.||-
+agtcggtgaac-
+
+agtc-gtgcaca
+||||-|||.||-
+agtcggtgaac-
+
+Score: 9.0
